@@ -7,9 +7,9 @@ package frc.robot;
 import static frc.robot.Constants.*;
 import static frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
+//import com.pathplanner.lib.PathConstraints;
+//import com.pathplanner.lib.PathPlanner;
+//import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.Joystick;
@@ -26,11 +26,6 @@ import frc.lib.team3061.swerve.SwerveModule;
 import frc.lib.team3061.swerve.SwerveModuleIO;
 import frc.lib.team3061.swerve.SwerveModuleIOSim;
 import frc.lib.team3061.swerve.SwerveModuleIOTalonFX;
-import frc.lib.team3061.vision.Vision;
-import frc.lib.team3061.vision.VisionConstants;
-import frc.lib.team3061.vision.VisionIO;
-import frc.lib.team3061.vision.VisionIOPhotonVision;
-import frc.lib.team3061.vision.VisionIOSim;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.ArmExtendCommand;
 import frc.robot.commands.ArmRotateCommand;
@@ -147,7 +142,7 @@ public class RobotContainer {
             armcontrol = new ArmSubsystem();
             armrotatecontrol = new ArmRotateSubsystem();
             clawsubsystem = new ClawSubsystem();
-            new Vision(new VisionIOPhotonVision(CAMERA_NAME));
+    //        new Vision(new VisionIOPhotonVision(CAMERA_NAME));
             break;
           }
         case ROBOT_SIMBOT:
@@ -168,13 +163,13 @@ public class RobotContainer {
             armrotatecontrol = new ArmRotateSubsystem();
             clawsubsystem = new ClawSubsystem();
             AprilTagFieldLayout layout;
-            try {
-              layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
-            } catch (IOException e) {
-              layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
-            }
-            new Vision(
-                new VisionIOSim(layout, drivetrain::getPose, VisionConstants.ROBOT_TO_CAMERA));
+           // try {
+           //   layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
+          //  } catch (IOException e) {
+           //   layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
+           // }
+           // new Vision(
+           //     new VisionIOSim(layout, drivetrain::getPose, VisionConstants.ROBOT_TO_CAMERA));
 
             break;
           }
@@ -198,7 +193,7 @@ public class RobotContainer {
       armcontrol = new ArmSubsystem();
       armrotatecontrol = new ArmRotateSubsystem();
       clawsubsystem = new ClawSubsystem();
-      new Vision(new VisionIO() {});
+    //  new Vision(new VisionIO() {});
     }
 
     // disable all telemetry in the LiveWindow to reduce the processing during each
@@ -309,7 +304,7 @@ public class RobotContainer {
     AUTO_EVENT_MAP.put("event2", Commands.print("passed marker 2"));
 
     // build auto path commands
-
+/* 
     List<PathPlannerTrajectory> Left1 =
         PathPlanner.loadPathGroup(
             "Left1",
@@ -563,10 +558,10 @@ public class RobotContainer {
             Commands.waitSeconds(3.0),
             Commands.runOnce(drivetrain::disableXstance, drivetrain),
             Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
+*/
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
-
+/*
     // Auto Mode Left1
     autoChooser.addOption("Auto Left 1", autoLeft1);
 
@@ -609,9 +604,11 @@ public class RobotContainer {
             new FeedForwardCharacterizationData("drive"),
             drivetrain::runCharacterizationVolts,
             drivetrain::getCharacterizationVelocity));
-
+*/
     Shuffleboard.getTab("MAIN").add(autoChooser.getSendableChooser());
   }
+
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
