@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
@@ -33,8 +33,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
   private final TunableNumber turnKi = new TunableNumber("Drive/TurnKi", ANGLE_KI);
   private final TunableNumber turnKd = new TunableNumber("Drive/TurnKd", ANGLE_KD);
 
-  private WPI_TalonFX mAngleMotor;
-  private WPI_TalonFX mDriveMotor;
+  private TalonFX mAngleMotor;
+  private TalonFX mDriveMotor;
   private CANCoder angleEncoder;
   private SimpleMotorFeedforward feedForward;
   private double angleOffsetDeg;
