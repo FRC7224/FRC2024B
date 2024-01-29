@@ -6,11 +6,6 @@ package frc.robot.subsystems.drivetrain;
 
 import static frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
 
-//import com.pathplanner.lib.PathConstraints;
-//import com.pathplanner.lib.PathPlanner;
-//import com.pathplanner.lib.PathPlannerTrajectory;
-//import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,7 +22,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.team3061.gyro.GyroIO;
@@ -35,9 +29,6 @@ import frc.lib.team3061.gyro.GyroIOInputsAutoLogged;
 import frc.lib.team3061.swerve.SwerveModule;
 import frc.lib.team3061.util.RobotOdometry;
 import frc.lib.team6328.util.TunableNumber;
-import frc.robot.Constants;
-import frc.robot.commands.FollowPath;
-import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -230,22 +221,25 @@ public class Drivetrain extends SubsystemBase {
    * origin of the field to the lower left corner (i.e., the corner of the field to the driver's
    * right). Zero degrees is away from the driver and increases in the CCW direction.
    *
-   * @param state the specified PathPlanner state to which is set the odometry
+   * @param state the specified PathPlanner state to which is set the odometry //*****************
+   *     NEED TO CHECK ON THIS
    */
-  public void resetOdometry(PathPlannerState state) {
-    setGyroOffset(state.holonomicRotation.getDegrees());
+  //  public void resetOdometry(PathPlannerState state) {
+  public void resetPose(Pose2d pose) {
+    this.resetPose(pose);
+  } //   setGyroOffset(state.holonomicRotation.getDegrees());
 
-    for (int i = 0; i < 4; i++) {
-      swerveModulePositions[i] = swerveModules[i].getPosition();
-    }
+  //    for (int i = 0; i < 4; i++) {
+  //      swerveModulePositions[i] = swerveModules[i].getPosition();
+  //    }
 
-    estimatedPoseWithoutGyro =
-        new Pose2d(state.poseMeters.getTranslation(), state.holonomicRotation);
-    poseEstimator.resetPosition(
-        this.getRotation(),
-        swerveModulePositions,
-        new Pose2d(state.poseMeters.getTranslation(), state.holonomicRotation));
-  }
+  //    estimatedPoseWithoutGyro =
+  //        new Pose2d(state.poseMeters.getTranslation(), state.holonomicRotation);
+  //    poseEstimator.resetPosition(
+  //        this.getRotation(),
+  //        swerveModulePositions,
+  //        new Pose2d(state.poseMeters.getTranslation(), state.holonomicRotation));
+  //  }
 
   /**
    * Controls the drivetrain to move the robot with the desired velocities in the x, y, and
@@ -574,46 +568,6 @@ public class Drivetrain extends SubsystemBase {
   public PIDController getAutoYController() {
     return autoYController;
   }
-
-  /** Autobalance. */
-  public void autoBalance() {
-    SmartDashboard.putNumber("pitch", gyroInputs.pitch);
-
-    if (gyroInputs.pitch >= Constants.PITCH_LIMIT) {
-      SmartDashboard.putNumber("pitch forward", gyroInputs.pitch);
-      List<PathPlannerTrajectory> Forward =
-          PathPlanner.loadPathGroup(
-              "Forward",
-              new PathConstraints(
-                  AUTO_MAX_SPEED_METERS_PER_SECOND,
-                  AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-      CommandScheduler.getInstance()
-          .schedule(
-              new FollowPathWithEvents(
-                  new FollowPath(Forward.get(0), this, true),
-                  Forward.get(0).getMarkers(),
-                  AUTO_EVENT_MAP));
-    } else if (gyroInputs.pitch <= -Constants.PITCH_LIMIT) {
-
-      List<PathPlannerTrajectory> Back =
-          PathPlanner.loadPathGroup(
-              "Back",
-              new PathConstraints(
-                  AUTO_MAX_SPEED_METERS_PER_SECOND,
-                  AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-      CommandScheduler.getInstance()
-          .schedule(
-              //      Commands.sequence(
-              new FollowPathWithEvents(
-                  new FollowPath(Back.get(0), this, true),
-                  Back.get(0).getMarkers(),
-                  AUTO_EVENT_MAP));
-    }
-    autoGyroscope();
-    enableXstance();
-  }
-
   /**
    * Returns the PID controller used to control the robot's rotation during autonomous.
    *

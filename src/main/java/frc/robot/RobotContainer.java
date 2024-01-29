@@ -7,10 +7,12 @@ package frc.robot;
 import static frc.robot.Constants.*;
 import static frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
 
-//import com.pathplanner.lib.PathConstraints;
-//import com.pathplanner.lib.PathPlanner;
-//import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.auto.NamedCommands;
+// import com.pathplanner.lib.PathConstraints;
+// import com.pathplanner.lib.PathPlanner;
+// import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -29,17 +31,11 @@ import frc.lib.team3061.swerve.SwerveModuleIOTalonFX;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.ArmExtendCommand;
 import frc.robot.commands.ArmRotateCommand;
-import frc.robot.commands.FeedForwardCharacterization;
-import frc.robot.commands.FeedForwardCharacterization.FeedForwardCharacterizationData;
-import frc.robot.commands.FollowPath;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmRotateSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -142,7 +138,7 @@ public class RobotContainer {
             armcontrol = new ArmSubsystem();
             armrotatecontrol = new ArmRotateSubsystem();
             clawsubsystem = new ClawSubsystem();
-    //        new Vision(new VisionIOPhotonVision(CAMERA_NAME));
+            //        new Vision(new VisionIOPhotonVision(CAMERA_NAME));
             break;
           }
         case ROBOT_SIMBOT:
@@ -163,13 +159,13 @@ public class RobotContainer {
             armrotatecontrol = new ArmRotateSubsystem();
             clawsubsystem = new ClawSubsystem();
             AprilTagFieldLayout layout;
-           // try {
-           //   layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
-          //  } catch (IOException e) {
-           //   layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
-           // }
-           // new Vision(
-           //     new VisionIOSim(layout, drivetrain::getPose, VisionConstants.ROBOT_TO_CAMERA));
+            // try {
+            //   layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
+            //  } catch (IOException e) {
+            //   layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
+            // }
+            // new Vision(
+            //     new VisionIOSim(layout, drivetrain::getPose, VisionConstants.ROBOT_TO_CAMERA));
 
             break;
           }
@@ -193,7 +189,7 @@ public class RobotContainer {
       armcontrol = new ArmSubsystem();
       armrotatecontrol = new ArmRotateSubsystem();
       clawsubsystem = new ClawSubsystem();
-    //  new Vision(new VisionIO() {});
+      //  new Vision(new VisionIO() {});
     }
 
     // disable all telemetry in the LiveWindow to reduce the processing during each
@@ -304,311 +300,78 @@ public class RobotContainer {
     AUTO_EVENT_MAP.put("event2", Commands.print("passed marker 2"));
 
     // build auto path commands
-/* 
-    List<PathPlannerTrajectory> Left1 =
-        PathPlanner.loadPathGroup(
-            "Left1",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+    //   List<PathPlannerTrajectory> Right3long =
+    //       PathPlanner.loadPathGroup(
+    //           "Right3long",
+    //           new PathConstraints(
+    //               AUTO_MAX_SPEED_METERS_PER_SECOND,
+    // AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
-    List<PathPlannerTrajectory> Left2 =
-        PathPlanner.loadPathGroup(
-            "Left2",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+    // Waypoints
+    NamedCommands.registerCommand("command1", Commands.print("passed marker 1"));
+    NamedCommands.registerCommand("command2", Commands.print("passed marker 2"));
+    NamedCommands.registerCommand(
+        "enableXStance", Commands.runOnce(drivetrain::enableXstance, drivetrain));
+    NamedCommands.registerCommand(
+        "disableXStance", Commands.runOnce(drivetrain::disableXstance, drivetrain));
+    NamedCommands.registerCommand("wait5Seconds", Commands.waitSeconds(5.0));
 
-    List<PathPlannerTrajectory> Left3 =
-        PathPlanner.loadPathGroup(
-            "Left3",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-    List<PathPlannerTrajectory> Left3long =
-        PathPlanner.loadPathGroup(
-            "Left3long",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-    List<PathPlannerTrajectory> Right1 =
-        PathPlanner.loadPathGroup(
-            "Right1",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-    List<PathPlannerTrajectory> Right2 =
-        PathPlanner.loadPathGroup(
-            "Right2",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-    List<PathPlannerTrajectory> Right3 =
-        PathPlanner.loadPathGroup(
-            "Right3",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-    List<PathPlannerTrajectory> Right3long =
-        PathPlanner.loadPathGroup(
-            "Right3long",
-            new PathConstraints(
-                AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-
-    Command autoLeft1 =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Left1.get(0), drivetrain, true),
-                Left1.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(1.0),
-            Commands.runOnce(drivetrain::autoBalance, drivetrain));
-    //      Commands.runOnce(drivetrain::enableXstance, drivetrain),
-    //      Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-    //      Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-    //      Commands.waitSeconds(2.0),
-    //      Commands.runOnce(drivetrain::disableXstance, drivetrain),
-    //      Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
-    Command autoLeft2 =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Left2.get(0), drivetrain, true),
-                Left2.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(1.0),
-            Commands.runOnce(drivetrain::autoBalance, drivetrain));
-    //       Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-    //       Commands.runOnce(drivetrain::enableXstance, drivetrain),
-    //       Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-    //       Commands.waitSeconds(2.0),
-    //       Commands.runOnce(drivetrain::disableXstance, drivetrain),
-    //       Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
-    Command autoLeft3 =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Left3.get(0), drivetrain, true),
-                Left3.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.75),
-            Commands.runOnce(drivetrain::autoBalance, drivetrain));
-    //          Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-    //         Commands.runOnce(drivetrain::enableXstance, drivetrain),
-    //         Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-    //         Commands.waitSeconds(2.0),
-    //         Commands.runOnce(drivetrain::disableXstance, drivetrain),
-    //         Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
-    Command autoLeft3long =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Left3long.get(0), drivetrain, true),
-                Left3long.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-            Commands.waitSeconds(3.0),
-            Commands.runOnce(drivetrain::disableXstance, drivetrain),
-            Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
-    Command autoRight1 =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Right1.get(0), drivetrain, true),
-                Right1.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(1.0),
-            Commands.runOnce(drivetrain::autoBalance, drivetrain));
-    //      Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-    //      Commands.runOnce(drivetrain::enableXstance, drivetrain),
-    //      Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-    //      Commands.waitSeconds(2.0),
-    //      Commands.runOnce(drivetrain::disableXstance, drivetrain),
-    //      Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
-    Command autoRight2 =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Right2.get(0), drivetrain, true),
-                Right2.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(1.0),
-            Commands.runOnce(drivetrain::autoBalance, drivetrain));
-    //       Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-    //       Commands.runOnce(drivetrain::enableXstance, drivetrain),
-    //       Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-    //       Commands.waitSeconds(2.0),
-    //       Commands.runOnce(drivetrain::disableXstance, drivetrain),
-    //        Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-
-    Command autoRight3 =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Right3.get(0), drivetrain, true),
-                Right3.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.75),
-            Commands.runOnce(drivetrain::autoBalance, drivetrain));
-
-    Command autoRight3long =
-        Commands.sequence(
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(armrotatecontrol::SetTargetRotStart, armrotatecontrol),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmHigh, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotHIGH, armrotatecontrol),
-            Commands.waitSeconds(2.0),
-            Commands.runOnce(clawsubsystem::stop, clawsubsystem),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(armcontrol::SetTargetArmZero, armcontrol),
-            Commands.runOnce(armrotatecontrol::SetTargetRotZero, armrotatecontrol),
-            new FollowPathWithEvents(
-                new FollowPath(Right3long.get(0), drivetrain, true),
-                Right3long.get(0).getMarkers(),
-                AUTO_EVENT_MAP),
-            Commands.runOnce(clawsubsystem::SetClawOn, clawsubsystem),
-            Commands.runOnce(drivetrain::autoGyroscope, drivetrain),
-            Commands.runOnce(drivetrain::enableXstance, drivetrain),
-            Commands.runOnce(drivetrain::setBrakeOn, drivetrain),
-            Commands.waitSeconds(3.0),
-            Commands.runOnce(drivetrain::disableXstance, drivetrain),
-            Commands.runOnce(drivetrain::setBrakeOff, drivetrain));
-*/
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
-/*
-    // Auto Mode Left1
-    autoChooser.addOption("Auto Left 1", autoLeft1);
+    /************ Test Path ************
+     *
+     * demonstration of PathPlanner auto with event markers
+     *
+     */
+    Command autoTest = new PathPlannerAuto("TestAuto");
+    autoChooser.addOption("Test Auto", autoTest);
 
-    // Auto Mode Left2
-    autoChooser.addOption("Auto Left 2", autoLeft2);
+    /************ Choreo Test Path ************
+     *
+     * demonstration of PathPlanner hosted Choreo path
+     *
+     */
+    Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
+    autoChooser.addOption("Choreo Auto", choreoAutoTest);
 
-    // Auto Mode Left3
-    autoChooser.addOption("Auto Left 3", autoLeft3);
+    /************ Start Point ************
+     *
+     * useful for initializing the pose of the robot to a known location
+     *
+     */
 
-    // Auto Mode Left3 Long
-    autoChooser.addOption("Auto Left 3 Long ", autoLeft3long);
+    Command startPoint =
+        Commands.runOnce(
+            () ->
+                drivetrain.resetPose(
+                    PathPlannerPath.fromPathFile("StartPoint").getPreviewStartingHolonomicPose()),
+            drivetrain);
+    autoChooser.addOption("Start Point", startPoint);
 
-    // Auto Mode Right1
-    autoChooser.addOption("Auto Right 1", autoRight1);
+    /************ Drive Characterization ************
+     *
+     * useful for characterizing the swerve modules for driving (i.e, determining kS and kV)
+     *
+     */
 
-    // Auto Mode Right2
-    autoChooser.addOption("Auto Right 2", autoRight2);
+    /************ Distance Test ************
+     *
+     * used for empirically determining the wheel diameter
+     *
+     */
+    Command distanceTestPathCommand = new PathPlannerAuto("DistanceTest");
+    autoChooser.addOption("Distance Path", distanceTestPathCommand);
 
-    // Auto Mode Right3
-    autoChooser.addOption("Auto Right 3", autoRight3);
+    /************ Auto Tuning ************
+     *
+     * useful for tuning the autonomous PID controllers
+     *
+     */
+    Command tuningCommand = new PathPlannerAuto("Tuning");
+    autoChooser.addOption("Auto Tuning", tuningCommand);
 
-    // Auto Mode Right3 Long
-    autoChooser.addOption("Auto Right 3 Long", autoRight3long);
-
-    // "auto" command for tuning the drive velocity PID
-    autoChooser.addOption(
-        "Drive Velocity Tuning",
-        Commands.sequence(
-            Commands.runOnce(drivetrain::disableFieldRelative, drivetrain),
-            Commands.deadline(
-                Commands.waitSeconds(5.0),
-                Commands.run(() -> drivetrain.drive(1.5, 0.0, 0.0), drivetrain))));
-
-    // "auto" command for characterizing the drivetrain
-    autoChooser.addOption(
-        "Drive Characterization",
-        new FeedForwardCharacterization(
-            drivetrain,
-            true,
-            new FeedForwardCharacterizationData("drive"),
-            drivetrain::runCharacterizationVolts,
-            drivetrain::getCharacterizationVelocity));
-*/
     Shuffleboard.getTab("MAIN").add(autoChooser.getSendableChooser());
   }
-
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

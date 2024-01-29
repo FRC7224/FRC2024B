@@ -12,9 +12,6 @@
 
 package frc.lib.team6328.util;
 
-
-
-
 @java.lang.SuppressWarnings({"java:S106", "java:S100", "java:S1210"})
 
 /**
