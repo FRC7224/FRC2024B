@@ -12,6 +12,8 @@ java {
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
+
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
@@ -173,6 +175,11 @@ gversion {
     dateFormat   = "yyyy-MM-dd HH:mm:ss z"
     timeZone     = "America/Detroit" // Use preferred time zone
     indent       = "  "
+}
+
+//don't show warning about using Pheonix 5 stuff still
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add '-Xlint:-deprecation,-removal'
 }
 
 project.compileJava.dependsOn(createVersionFile)

@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.GlobalStatus;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,84 +20,47 @@ import org.littletonrobotics.junction.Logger;
  *
  * <p>At End: stops the drivetrain
  */
-public class ArmExtendCommand extends Command {
+public class IntakeCommand extends Command {
 
-  private final ArmSubsystem armsubsystem;
-  private final DoubleSupplier translationXSupplier;
-  private final JoystickButton extendoverideButton;
-  private final JoystickButton medgoalButton;
-  private final JoystickButton highgoalButton;
-  private final JoystickButton drvgoalButton;
+  private final IntakeSubsystem intakesubsystem;
+  private final JoystickButton intakeoverrideButton;
+  private final JoystickButton intakeButton;
 
-  double extendamount = 0;
-  double targetPositionRotations = 0;
-  /** Used to create string thoughout loop */
-  StringBuilder _sb = new StringBuilder();
 
-  int _loops = 0;
 
-  /**
-   * Create a new ArmExtendCommand command object.
-   *
-   * @param armsubsystem the drivetrain subsystem instructed by this command
-   * @param translationXSupplier the supplier of the translation x value as a percentage of the
-   *     maximum velocity as defined by the standard field or robot coordinate system
-   * @return
-   */
-  public ArmExtendCommand(
-      ArmSubsystem armsubsystem,
-      JoystickButton extendoverideButton,
-      JoystickButton medgoalButton,
-      JoystickButton highgoalButton,
-      JoystickButton drvgoalButton,
-      DoubleSupplier translationXSupplier) {
-    this.armsubsystem = armsubsystem;
-    this.extendoverideButton = extendoverideButton;
-    this.medgoalButton = medgoalButton;
-    this.highgoalButton = highgoalButton;
-    this.drvgoalButton = drvgoalButton;
-    this.translationXSupplier = translationXSupplier;
+  
+  public IntakeCommand(
+      IntakeSubsystem intakesubsystem,
+      JoystickButton intakeoverrideButton,
+      JoystickButton intakeButton) {
+    this.intakesubsystem = intakesubsystem;
+    this.intakeoverrideButton = intakeoverrideButton;
+    this.intakeButton = intakeButton;
+;
 
-    addRequirements(armsubsystem);
+    addRequirements(intakesubsystem);
   }
 
   public void execute() {
     /* Gamepad processing */
 
-    double extendcontrol = modifyAxis(translationXSupplier.getAsDouble());
-
-    double motorOutput;
-
     /* Get Talon/Victor's current output percentage */
-    motorOutput = ArmSubsystem.GetMotorOutputPercent();
-
-    /* Prepare line to print */
-    _sb.append("\tout:");
-    /* Cast to int to remove decimal places */
-    _sb.append((int) (motorOutput * 100));
-    _sb.append("%"); // Percent
-
-    _sb.append("\tpos:");
-    _sb.append(ArmSubsystem.GetSelectedSensorPosition());
-    _sb.append("u"); // Native units
-
     /**
-     * When button 1 is pressed, perform Position Closed Loop to selected position, indicated by
-     * Joystick position x10, [-10, 10] rotations
+
      */
-    if (extendoverideButton.getAsBoolean()) {
-      /* When button is held, just straight drive */
+    if (intakeoverrideButton.getAsBoolean()) {
+      /* When button is held, reverse  */
       /* Percent Output */
-      armsubsystem.SetPercentOutput(extendcontrol * Constants.OV_ARM);
+      intakesubsystem.SetPercentOutput(extendcontrol * Constants.OV_ARM);
     } else if (drvgoalButton.getAsBoolean()) {
       targetPositionRotations = Constants.DRV_ARM_PRESET;
-      armsubsystem.SetTargetPositionRotations(targetPositionRotations);
+      intakesubsystem.SetTargetPositionRotations(targetPositionRotations);
     } else if (medgoalButton.getAsBoolean()) {
       targetPositionRotations = Constants.MED_ARM_PRESET;
-      armsubsystem.SetTargetPositionRotations(targetPositionRotations);
+      intakesubsystem.SetTargetPositionRotations(targetPositionRotations);
     } else if (highgoalButton.getAsBoolean()) {
       targetPositionRotations = Constants.HIGH_ARM_PRESET;
-      armsubsystem.SetTargetPositionRotations(targetPositionRotations);
+      intakesubsystem.SetTargetPositionRotations(targetPositionRotations);
     } else {
       /* Position Closed Loop */
       /* 7.5 Rotations * 4096 u/rev in either direction */
@@ -118,14 +81,14 @@ public class ArmExtendCommand extends Command {
       }
       ;
 
-      armsubsystem.SetTargetPositionRotations(targetPositionRotations - Constants.ARM_OFFSET);
+      intakesubsystem.SetTargetPositionRotations(targetPositionRotations - Constants.ARM_OFFSET);
     }
 
     /* If Talon is in position closed-loop, print some more info */
-    if (armsubsystem.GetControlMode() == ControlMode.Position) {
+    if (intakesubsystem.GetControlMode() == ControlMode.Position) {
       /* ppend more signals to print when in speed mode. */
       //   _sb.append("\terr:");
-      //    _sb.append(armsubsystem.GetClosedLoopError());
+      //    _sb.append(intakesubsystem.GetClosedLoopError());
       //   _sb.append("u"); // Native Units
 
       //   _sb.append("\ttrg:");
@@ -145,11 +108,11 @@ public class ArmExtendCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    this.armsubsystem.stop();
+    this.intakesubsystem.stop();
 
     super.end(interrupted);
 
-    Logger.getInstance().recordOutput("ActiveCommands/TeleopSwerve", false);
+    Logger.recordOutput("ActiveCommands/TeleopSwerve", false);
   }
 
   /**

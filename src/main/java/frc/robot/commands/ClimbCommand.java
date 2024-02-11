@@ -4,8 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
-import frc.robot.subsystems.ArmRotateSubsystem;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,14 +20,13 @@ import org.littletonrobotics.junction.Logger;
  *
  * <p>At End: stops the drivetrain
  */
-public class ArmRotateCommand extends Command {
+public class ClimbCommand extends Command {
 
-  private final ArmRotateSubsystem armrotatesubsystem;
+  private final ClimbSubsystem climbsubsystem;
   private final DoubleSupplier translationRSupplier;
-  private final JoystickButton rotateoverideButton;
-  private final JoystickButton medrotateButton;
-  private final JoystickButton highrotateButton;
-  private final JoystickButton drvrotateButton;
+  private final JoystickButton climboverrideButton;
+  private final JoystickButton autolevelButton;
+
 
   double targetPositionRotations = 0;
   /** Used to create string thoughout loop */
@@ -43,21 +42,17 @@ public class ArmRotateCommand extends Command {
    *     maximum velocity as defined by the standard field or robot coordinate system
    * @return
    */
-  public ArmRotateCommand(
-      ArmRotateSubsystem armrotatesubsystem,
-      JoystickButton rotateoverideButton,
-      JoystickButton medrotateButton,
-      JoystickButton highrotateButton,
-      JoystickButton drvrotateButton,
-      DoubleSupplier translationRSupplier) {
-    this.armrotatesubsystem = armrotatesubsystem;
-    this.rotateoverideButton = rotateoverideButton;
-    this.medrotateButton = medrotateButton;
-    this.highrotateButton = highrotateButton;
-    this.drvrotateButton = drvrotateButton;
+  public ClimbCommand(
+      ClimbSubsystem climbsubsystem,
+      JoystickButton climboverrideButton,
+      JoystickButton autoleveButton,
+       DoubleSupplier translationRSupplier) {
+    this.climbsubsystem = climbsubsystem;
+    this.climboverrideButton = climboverrideButton;
+    this.autolevelButton = autoleveButton;
     this.translationRSupplier = translationRSupplier;
 
-    addRequirements(armrotatesubsystem);
+    addRequirements(climbsubsystem);
   }
 
   public void execute() {
@@ -68,7 +63,7 @@ public class ArmRotateCommand extends Command {
     double motorOutput;
 
     /* Get Talon/Victor's current output percentage */
-    motorOutput = ArmSubsystem.GetMotorOutputPercent();
+    motorOutput = IntakeSubsystem.GetMotorOutputPercent();
 
     /* Prepare line to print */
     _sb.append("\tout:");
@@ -77,64 +72,47 @@ public class ArmRotateCommand extends Command {
     _sb.append("%"); // Percent
 
     _sb.append("\tpos:");
-    _sb.append(ArmSubsystem.GetSelectedSensorPosition());
+    _sb.append(IntakeSubsystem.GetSelectedSensorPosition());
     _sb.append("u"); // Native units
 
     /**
      * When button 1 is pressed, perform Position Closed Loop to selected position, indicated by
      * Joystick position x10, [-10, 10] rotations
      */
-    if (rotateoverideButton.getAsBoolean()) {
+    if (climboverrideButton.getAsBoolean()) {
       /* When button is held, just straight drive */
       /* Percent Output */
-      armrotatesubsystem.SetPercentOutputR1(rotatecontrol * Constants.OV_ROT_ARM);
-      armrotatesubsystem.SetPercentOutputR2(rotatecontrol * -Constants.OV_ROT_ARM);
-    } else if (drvrotateButton.getAsBoolean()) {
+      climbsubsystem.SetPercentOutputR1(rotatecontrol * Constants.OV_ROT_ARM);
+      climbsubsystem.SetPercentOutputR2(rotatecontrol * Constants.OV_ROT_ARM);
+    } else if (autolevelButton.getAsBoolean()) {
+      ///*** NEED TO FINISH *** */
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = Constants.DRV_ROT_PRESET; // No offest
+        targetPositionRotations = Constants.AUTO_LEVEL_PRESET; // No offest
       } else {
-        targetPositionRotations = -Constants.DRV_ROT_PRESET;
+        targetPositionRotations = Constants.AUTO_LEVEL_PRESET;
       }
-      armrotatesubsystem.SetTargetPositionRotationsR1(targetPositionRotations);
-      armrotatesubsystem.SetTargetPositionRotationsR2(-targetPositionRotations);
-    } else if (medrotateButton.getAsBoolean()) {
-      if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = Constants.MED_ROT_PRESET;
-      } else {
-        targetPositionRotations = -(Constants.MED_ROT_PRESET + Constants.OFFSET_ROT_PRE_BACK_MED);
-      }
-      armrotatesubsystem.SetTargetPositionRotationsR1(targetPositionRotations);
-      armrotatesubsystem.SetTargetPositionRotationsR2(-targetPositionRotations);
-    } else if (highrotateButton.getAsBoolean()) {
-      if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = Constants.HIGH_ROT_PRESET;
-      } else {
-        targetPositionRotations = -(Constants.HIGH_ROT_PRESET + Constants.OFFSET_ROT_PRE_BACK);
-      }
-      armrotatesubsystem.SetTargetPositionRotationsR1(targetPositionRotations);
-      armrotatesubsystem.SetTargetPositionRotationsR2(-targetPositionRotations);
+      climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
+      climbsubsystem.SetTargetPositionClimb2(-targetPositionRotations);
     } else {
       /* Position Closed Loop */
       /* x *  Rotations * 4096 u/rev in either direction */
 
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = rotatecontrol * Constants.ROT_MAX;
-      } else {
-        targetPositionRotations = rotatecontrol * Constants.ROT_MAX + Constants.OFFSET_ROT;
-      }
-      armrotatesubsystem.SetTargetPositionRotationsR1(targetPositionRotations);
-      armrotatesubsystem.SetTargetPositionRotationsR2(-targetPositionRotations);
+        targetPositionRotations = rotatecontrol * Constants.CLIMB_MAX;
+      } 
+      climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
+      climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);
     }
 
     /* If Talon is in position closed-loop, print some more info */
-    if (armrotatesubsystem.GetControlModeR1() == ControlMode.Position) {
+    if (climbsubsystem.GetControlModeR1() == ControlMode.Position) {
       /* ppend more signals to print when in speed mode. */
       _sb.append("\terr R1:");
-      _sb.append(armrotatesubsystem.GetClosedLoopErrorR1());
+      _sb.append(climbsubsystem.GetClosedLoopErrorR1());
       _sb.append("u"); // Native Units
 
       _sb.append("\terr R2:");
-      _sb.append(armrotatesubsystem.GetClosedLoopErrorR2());
+      _sb.append(climbsubsystem.GetClosedLoopErrorR2());
       _sb.append("u"); // Native Units
 
       _sb.append("\ttrg:");
@@ -154,11 +132,11 @@ public class ArmRotateCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    this.armrotatesubsystem.stop();
+    this.climbsubsystem.stop();
 
     super.end(interrupted);
 
-    Logger.getInstance().recordOutput("ActiveCommands/TeleopSwerve", false);
+    Logger.recordOutput("ActiveCommands/TeleopSwerve", false);
   }
 
   /**

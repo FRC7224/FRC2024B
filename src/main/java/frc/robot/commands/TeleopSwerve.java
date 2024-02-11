@@ -62,10 +62,10 @@ public class TeleopSwerve extends Command {
     double rotationalVelocity =
         rotationPercentage * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
 
-    Logger.getInstance().recordOutput("ActiveCommands/TeleopSwerve", true);
-    Logger.getInstance().recordOutput("TeleopSwerve/xVelocity", xVelocity);
-    Logger.getInstance().recordOutput("TeleopSwerve/yVelocity", yVelocity);
-    Logger.getInstance().recordOutput("TeleopSwerve/rotationalVelocity", rotationalVelocity);
+    Logger.recordOutput("ActiveCommands/TeleopSwerve", true);
+    Logger.recordOutput("TeleopSwerve/xVelocity", xVelocity);
+    Logger.recordOutput("TeleopSwerve/yVelocity", yVelocity);
+    Logger.recordOutput("TeleopSwerve/rotationalVelocity", rotationalVelocity);
 
     drivetrain.drive(xVelocity, yVelocity, rotationalVelocity);
   }
@@ -76,7 +76,7 @@ public class TeleopSwerve extends Command {
 
     super.end(interrupted);
 
-    Logger.getInstance().recordOutput("ActiveCommands/TeleopSwerve", false);
+    Logger.recordOutput("ActiveCommands/TeleopSwerve", false);
   }
 
   /**

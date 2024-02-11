@@ -20,6 +20,8 @@ import frc.lib.team3061.util.CANDeviceFinder;
 import frc.lib.team3061.util.CANDeviceId.CANDeviceType;
 import frc.lib.team6328.util.TunableNumber;
 
+@SuppressWarnings("removal")
+
 /**
  * Implementation of the SwerveModuleIO interface for MK4 Swerve Modules with two Falcon 500 motors
  * and a CAN coder.

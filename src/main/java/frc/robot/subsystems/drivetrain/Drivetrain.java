@@ -273,12 +273,9 @@ public class Drivetrain extends SubsystemBase {
           chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rotationalVelocity);
         }
 
-        Logger.getInstance()
-            .recordOutput("Drivetrain/chassisSpeedVx", chassisSpeeds.vxMetersPerSecond);
-        Logger.getInstance()
-            .recordOutput("Drivetrain/chassisSpeedVy", chassisSpeeds.vyMetersPerSecond);
-        Logger.getInstance()
-            .recordOutput("Drivetrain/chassisSpeedVo", chassisSpeeds.omegaRadiansPerSecond);
+        Logger.recordOutput("Drivetrain/chassisSpeedVx", chassisSpeeds.vxMetersPerSecond);
+        Logger.recordOutput("Drivetrain/chassisSpeedVy", chassisSpeeds.vyMetersPerSecond);
+        Logger.recordOutput("Drivetrain/chassisSpeedVo", chassisSpeeds.omegaRadiansPerSecond);
 
         SwerveModuleState[] swerveModuleStates =
             KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerGravity);
@@ -327,7 +324,7 @@ public class Drivetrain extends SubsystemBase {
 
     // update and log gyro inputs
     gyroIO.updateInputs(gyroInputs);
-    Logger.getInstance().processInputs("Drive/Gyro", gyroInputs);
+    Logger.processInputs("Drive/Gyro", gyroInputs);
     SmartDashboard.putNumber("pitch", gyroInputs.pitch);
 
     // update and log the swerve moudles inputs
@@ -380,11 +377,11 @@ public class Drivetrain extends SubsystemBase {
 
     // log poses, 3D geometry, and swerve module states, gyro offset
     Pose2d poseEstimatorPose = poseEstimator.getEstimatedPosition();
-    Logger.getInstance().recordOutput("Odometry/RobotNoGyro", estimatedPoseWithoutGyro);
-    Logger.getInstance().recordOutput("Odometry/Robot", poseEstimatorPose);
-    Logger.getInstance().recordOutput("3DField", new Pose3d(poseEstimatorPose));
-    Logger.getInstance().recordOutput("SwerveModuleStates", states);
-    Logger.getInstance().recordOutput(SUBSYSTEM_NAME + "/gyroOffset", this.gyroOffset);
+    Logger.recordOutput("Odometry/RobotNoGyro", estimatedPoseWithoutGyro);
+    Logger.recordOutput("Odometry/Robot", poseEstimatorPose);
+    Logger.recordOutput("3DField", new Pose3d(poseEstimatorPose));
+    Logger.recordOutput("SwerveModuleStates", states);
+    Logger.recordOutput(SUBSYSTEM_NAME + "/gyroOffset", this.gyroOffset);
   }
 
   /**

@@ -1,19 +1,17 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 /** */
-public class ClawSubsystem extends SubsystemBase {
+public class ShootSubsystem extends SubsystemBase {
 
   private static CANSparkMax claw1 = new CANSparkMax(Constants.CLAW_L, MotorType.kBrushless);
   private static CANSparkMax claw2 = new CANSparkMax(Constants.CLAW_R, MotorType.kBrushless);
-  private final Timer timer = new Timer();
 
-  public ClawSubsystem() {}
+  public ShootSubsystem() {}
 
   /** Sets the intake claw speed */
   public void SetClawOn() {

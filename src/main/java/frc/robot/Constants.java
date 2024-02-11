@@ -9,8 +9,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import frc.lib.team6328.util.Alert;
 import frc.lib.team6328.util.Alert.AlertType;
+import pabeles.concurrency.IntOperatorTask.Max;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -24,11 +26,14 @@ public final class Constants {
 
   ///////////////// CAN Constants //////////////////////////////
 
-  public static int ARM_EXTEND_PORT = 17;
-  public static int ARM_ROTATE_PORT_R = 14;
-  public static int ARM_ROTATE_PORT_L = 15;
-  public static int CLAW_R = 18;
-  public static int CLAW_L = 19;
+  public static int CLIMB_PORT_R = 14;
+  public static int CLIMB_PORT_L = 15;
+  public static int INTAKE_PORT = 16;
+  public static int ELEVATOR_R = 17;
+  public static int ELEVATOR_L = 18;
+  public static int SHOOT_PORT_R = 19;
+  public static int SHOOT_PORT_L  = 20;
+
 
   public static final double LOOP_PERIOD_SECS = 0.02;
 
@@ -89,19 +94,16 @@ public final class Constants {
   public static double PITCH_LIMIT = 5.0;
   public static double PITCH_CAL_OFFSET = 0;
 
-  ////// Claw  Constants ///////////////////////////
+  ////// Intake Constants ///////////////////////////
+  public static double INTAKE_SPEED = -0.1;
 
-  public static double CLAW_SPEED = -0.1;
+  ////// Elevator Constants ///////////////////////////
+  public static double ELEVATOR_SPEED = -0.1;
+
 
   ////// ARM Extend Constants ///////////////////////////
 
-  public static double MAX_ARM = 42.5 * 4096;
-  public static double MAX48_ARM = 36 * 4096;
-  public static double MED_ARM_PRESET = 18 * 4096;
-  public static double HIGH_ARM_PRESET = 42.5 * 4096; //
-  public static double HIGH_ARM_PRESET_AUTO = 42.25 * 4096; //
-  public static double DRV_ARM_PRESET = 3.0 * 4096; //
-  public static double ARM_OFFSET = 0; //
+ 
   public static double OV_ARM = 0.1;
 
   /**
@@ -136,41 +138,32 @@ public final class Constants {
 
   public static final double DEADBAND = 0.05;
 
-  ////// ARM Rotate 1 Constants ///////////////////////////
+  ////// Climb  Constants ///////////////////////////
 
-  public static double ROT_MAX = 12.05 * 4096;
-  public static double LOW48_ROT = 17000;
-  public static double HIGH48_ROT = 22000;
-  public static double START_ROT_PRESET = 13000;
-  public static double MED_ROT_PRESET = 24000;
-  public static double HIGH_ROT_PRESET = 21000;
-  public static double DRV_ROT_PRESET = 22500;
-  public static double OFFSET_ROT = -2500;
-  public static double OFFSET_ROT_PRE = 3000;
-  public static double OFFSET_ROT_PRE_BACK_MED = 1000;
-  public static double OFFSET_ROT_PRE_BACK = 350;
+  public static double CLIMB_MAX = 12.05 * 4096;
+   public static double AUTO_LEVEL_PRESET= 12.05 * 4096;
   public static double OV_ROT_ARM = 0.1;
 
   /**
    * Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3. Only the
    * first two (0,1) are visible in web-based configuration.
    */
-  public static final int krotate1SlotIdx = 0;
+  public static final int kclimb1SlotIdx = 0;
 
   /** Talon FX supports multiple (cascaded) PID loops. For now we just want the primary one. */
-  public static final int krotate1PIDLoopIdx = 0;
+  public static final int kclimb1PIDLoopIdx = 0;
 
   /**
    * Set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action
    * fails.
    */
-  public static final int krotate1TimeoutMs = 30;
+  public static final int kclimb1TimeoutMs = 30;
 
   /* Choose so that Talon does not report sensor out of phase */
-  public static boolean krotate1SensorPhase = true;
+  public static boolean kclimb1SensorPhase = true;
 
   /** Choose based on what direction you want to be positive, this does not affect motor invert. */
-  public static boolean krotate1MotorInvert = false;
+  public static boolean kclimb1MotorInvert = false;
 
   /**
    * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki, kd, kf, izone, peak
@@ -184,22 +177,22 @@ public final class Constants {
    * Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3. Only the
    * first two (0,1) are visible in web-based configuration.
    */
-  public static final int krotate2SlotIdx = 0;
+  public static final int kclimb2SlotIdx = 0;
 
   /** Talon FX supports multiple (cascaded) PID loops. For now we just want the primary one. */
-  public static final int krotate2PIDLoopIdx = 0;
+  public static final int kclimb2PIDLoopIdx = 0;
 
   /**
    * Set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action
    * fails.
    */
-  public static final int krotate2TimeoutMs = 30;
+  public static final int kclimb2TimeoutMs = 30;
 
   /* Choose so that Talon does not report sensor out of phase */
-  public static boolean krotate2SensorPhase = true;
+  public static boolean kclimb2SensorPhase = true;
 
   /** Choose based on what direction you want to be positive, this does not affect motor invert. */
-  public static boolean krotate2MotorInvert = false;
+  public static boolean kclimb2MotorInvert = false;
 
   /**
    * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki, kd, kf, izone, peak
