@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,10 +12,12 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
 
   private static WPI_TalonSRX intake = new WPI_TalonSRX(Constants.INTAKE_PORT);
-  private static CANSparkMax elevator1 = new CANSparkMax(Constants.ELEVATOR_L, MotorType.kBrushless);
-  private static CANSparkMax elevator2 = new CANSparkMax(Constants.ELEVATOR_R, MotorType.kBrushless);
+  private static CANSparkMax elevator1 =
+      new CANSparkMax(Constants.ELEVATOR_L, MotorType.kBrushless);
+  private static CANSparkMax elevator2 =
+      new CANSparkMax(Constants.ELEVATOR_R, MotorType.kBrushless);
 
-  //private final Timer timer = new Timer();
+  // private final Timer timer = new Timer();
 
   public IntakeSubsystem() {}
 
@@ -26,9 +26,9 @@ public class IntakeSubsystem extends SubsystemBase {
     intake.set(Constants.INTAKE_SPEED);
   }
 
-  /** Set Intake off  */
+  /** Set Intake off */
   public void SetIntakeOff() {
-     intake.set(0);
+    intake.set(0);
   }
 
   /** Set the elevator speed */
@@ -37,12 +37,11 @@ public class IntakeSubsystem extends SubsystemBase {
     elevator2.set(Constants.ELEVATOR_SPEED);
   }
 
-  /** Set elevator off  */
+  /** Set elevator off */
   public void SetElevatorOff() {
-     elevator1.set(0);
-     elevator2.set(0);
+    elevator1.set(0);
+    elevator2.set(0);
   }
-
 
   @Override
   public void periodic() {

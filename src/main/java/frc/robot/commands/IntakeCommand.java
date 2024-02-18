@@ -1,13 +1,8 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants;
-import frc.robot.GlobalStatus;
 import frc.robot.subsystems.IntakeSubsystem;
-import java.util.function.DoubleSupplier;
-import org.littletonrobotics.junction.Logger;
 
 /**
  * This command, when executed, instructs the drivetrain subsystem to drive based on the specified
@@ -26,9 +21,6 @@ public class IntakeCommand extends Command {
   private final JoystickButton intakeoverrideButton;
   private final JoystickButton intakeButton;
 
-
-
-  
   public IntakeCommand(
       IntakeSubsystem intakesubsystem,
       JoystickButton intakeoverrideButton,
@@ -36,7 +28,7 @@ public class IntakeCommand extends Command {
     this.intakesubsystem = intakesubsystem;
     this.intakeoverrideButton = intakeoverrideButton;
     this.intakeButton = intakeButton;
-;
+    ;
 
     addRequirements(intakesubsystem);
   }
@@ -45,19 +37,17 @@ public class IntakeCommand extends Command {
     /* Gamepad processing */
 
     /* Get Talon/Victor's current output percentage */
-    /**
-
-     */
+    /** */
     if (intakeoverrideButton.getAsBoolean()) {
       /* When button is held override */
       /* Percent Output */
       intakesubsystem.SetIntakeOn();
       intakesubsystem.SetElevatorOn();
     } else if (intakeButton.getAsBoolean()) {
-           intakesubsystem.SetIntakeOn();
-           intakesubsystem.SetElevatorOn();
-      }
+      intakesubsystem.SetIntakeOn();
+      intakesubsystem.SetElevatorOn();
+    }
     intakesubsystem.SetIntakeOff();
     intakesubsystem.SetElevatorOff();
-      }
+  }
 }

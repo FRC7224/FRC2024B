@@ -46,7 +46,7 @@ public class RobotContainer {
   // private OperatorInterface oi = new OperatorInterface() {};
 
   final Joystick drivejoystick = new Joystick(0);
-  JoystickButton ClawOn = new JoystickButton(drivejoystick, 1),
+  JoystickButton Shoot = new JoystickButton(drivejoystick, 1),
       XStanceButton = new JoystickButton(drivejoystick, 2),
       ResetGyroButton = new JoystickButton(drivejoystick, 3),
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
@@ -62,7 +62,7 @@ public class RobotContainer {
   private Drivetrain drivetrain;
   private IntakeSubsystem intakesubsystem;
   private ClimbSubsystem climbcontrol;
-  private ShootSubsystem clawscontrol;
+  private ShootSubsystem shootsubsystem;
 
   // use AdvantageKit's LoggedDashboardChooser instead of SendableChooser to
   // ensure accurate logging
@@ -135,7 +135,7 @@ public class RobotContainer {
             drivetrain = new Drivetrain(gyro, flModule, frModule, blModule, brModule);
             intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
-            clawscontrol = new ShootSubsystem();
+            shootsubsystem = new ShootSubsystem();
             //        new Vision(new VisionIOPhotonVision(CAMERA_NAME));
             break;
           }
@@ -155,7 +155,7 @@ public class RobotContainer {
             drivetrain = new Drivetrain(new GyroIO() {}, flModule, frModule, blModule, brModule);
             intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
-            clawscontrol = new ShootSubsystem();
+            shootsubsystem = new ShootSubsystem();
 
             // try {
             //   layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
@@ -184,9 +184,9 @@ public class RobotContainer {
       SwerveModule brModule =
           new SwerveModule(new SwerveModuleIO() {}, 3, MAX_VELOCITY_METERS_PER_SECOND);
       drivetrain = new Drivetrain(new GyroIO() {}, flModule, frModule, blModule, brModule);
-      intakesubsystem  = new IntakeSubsystem();
+      intakesubsystem = new IntakeSubsystem();
       climbcontrol = new ClimbSubsystem();
-      clawscontrol = new ShootSubsystem();
+      shootsubsystem = new ShootSubsystem();
       //  new Vision(new VisionIO() {});
     }
 
@@ -237,17 +237,11 @@ public class RobotContainer {
 
     intakesubsystem.setDefaultCommand(
         new IntakeCommand( // use same button for preset rotate and extend
-            intakesubsystem,
-            IntakeoverrideButton,
-           IntakeButton
-        ));
+            intakesubsystem, IntakeoverrideButton, IntakeButton));
 
     climbcontrol.setDefaultCommand(
         new ClimbCommand(
-            climbcontrol,
-            ClimboverrideButton,
-            Autolevel,
-            () -> -drivejoystick.getRawAxis(2)));
+            climbcontrol, ClimboverrideButton, Autolevel, () -> -drivejoystick.getRawAxis(2)));
 
     configureButtonBindings();
   }
@@ -273,8 +267,13 @@ public class RobotContainer {
             drivetrain::getFieldRelative));
 
     // reset close ope claw
-    ClawOn.onFalse(Commands.runOnce(clawscontrol::SetClawOn, clawscontrol));
-    ClawOn.onTrue(Commands.runOnce(clawscontrol::stop, clawscontrol));
+
+    Shoot.onFalse(
+        Commands.parallel(
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
+
+    Shoot.onTrue(Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
 
     // x-stance
     XStanceButton.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));

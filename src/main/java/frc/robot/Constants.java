@@ -9,10 +9,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import frc.lib.team6328.util.Alert;
 import frc.lib.team6328.util.Alert.AlertType;
-import pabeles.concurrency.IntOperatorTask.Max;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -32,8 +30,7 @@ public final class Constants {
   public static int ELEVATOR_R = 17;
   public static int ELEVATOR_L = 18;
   public static int SHOOT_PORT_R = 19;
-  public static int SHOOT_PORT_L  = 20;
-
+  public static int SHOOT_PORT_L = 20;
 
   public static final double LOOP_PERIOD_SECS = 0.02;
 
@@ -100,10 +97,8 @@ public final class Constants {
   ////// Elevator Constants ///////////////////////////
   public static double ELEVATOR_SPEED = -0.1;
 
-
   ////// ARM Extend Constants ///////////////////////////
 
- 
   public static double OV_ARM = 0.1;
 
   /**
@@ -141,7 +136,7 @@ public final class Constants {
   ////// Climb  Constants ///////////////////////////
 
   public static double CLIMB_MAX = 12.05 * 4096;
-   public static double AUTO_LEVEL_PRESET= 12.05 * 4096;
+  public static double AUTO_LEVEL_PRESET = 12.05 * 4096;
   public static double OV_CLIMB = 0.1;
 
   /**
@@ -198,5 +193,91 @@ public final class Constants {
    * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki, kd, kf, izone, peak
    * output);
    */
-  public static final Gains kGainsR2 = new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0);
+  public static final Gains kGainsR2 =
+      new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0); // Move Ball to shooter
+
+  public static int kballIntakeTimer_timer = 5;
+
+  /** *** shoot constants */
+
+  // Shooter / Elevator Constants
+  public static double kB0 = 2000;
+
+  public static double kB1 = 7000;
+  public static double kB2 = 7000;
+  public static double kB3 = 7000;
+  public static double kB4 = 7000;
+  public static double kB5 = 7000;
+  public static double kB6 = 7000;
+  public static double kB7 = 9300;
+  public static double kB8 = 9500;
+  public static double kB9 = 10000;
+  public static double kB10 = 10500;
+  public static double kB11 = 11000;
+  public static double kB12 = 11500;
+  public static double kB13 = 12000;
+  public static double kB14 = 12500;
+  public static double kB15 = 13000;
+  public static double kB16 = 13500;
+  public static double kB17 = 14000;
+  public static double kB18 = 15000;
+  public static double kB19 = 16000;
+  public static double kB20 = 17000;
+  public static double kB21 = 18000;
+  public static double kB22 = 19000;
+  public static double kB23 = 20000;
+  public static double kB24 = 21000;
+  public static double kB25 = 22000;
+  public static double kT0 = 1000;
+  public static double kT1 = 3000;
+  public static double kT2 = 3000;
+  public static double kT3 = 3000;
+  public static double kT4 = 3000;
+  public static double kT5 = 3000;
+  public static double kT6 = 3000;
+  public static double kT7 = 3000;
+  ;
+  public static double kT8 = 3450;
+  public static double kT9 = 3600;
+  public static double kT10 = 3750;
+  public static double kT11 = 3900;
+  public static double kT12 = 4050;
+  public static double kT13 = 4200;
+  public static double kT14 = 4350;
+  public static double kT15 = 4500;
+  public static double kT16 = 4650;
+  public static double kT17 = 4800;
+  public static double kT18 = 5200;
+  public static double kT19 = 5600;
+  public static double kT20 = 6000;
+  public static double kT21 = 6400;
+  public static double kT22 = 6800;
+  public static double kT23 = 7200;
+  public static double kT24 = 7600;
+  public static double kT25 = 8000;
+  //
+  //
+  public static double kB26 = 500;
+  public static double kT26 = 1000;
+
+  public static int kshortshootzone = 26;
+  public static double kelvspeed = -0.7;
+
+  public static double shooterTolerance = 300.0;
+  public static double kshooterTimer_spin = 1.2; // / was 1.2
+  public static double kshooterTimer_timer = 2.2; // / was 1.2
+  public static boolean shooterMode = false;
+  // public static int kPIDLoopIdx = 0;
+  // public static int kTimeoutMs = 30;
+  public static double kshootRightP = 0.25;
+  public static double kshootRightI = 0.001;
+  public static double kshootRightD = 20;
+  public static double kshootRightF = 1023.0 / 7200.0;
+  //
+  public static double kshootLeftP = 0.25;
+  public static double kshootLeftI = 0.001;
+  public static double kshootLeftD = 20;
+  public static double kshootLeftF = 1023.0 / 7200.0;
+  public static int rightencoder;
+  public static int leftencoder;
 }

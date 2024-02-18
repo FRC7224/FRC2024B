@@ -39,8 +39,7 @@ public class ClimbSubsystem extends SubsystemBase {
     climb1.setSensorPhase(Constants.kclimb1SensorPhase);
 
     /**
-     * Set based on what direction you want forward/positive to be. This does not
-     * affect sensor
+     * Set based on what direction you want forward/positive to be. This does not affect sensor
      * phase.
      */
     climb1.setInverted(Constants.kclimb1MotorInvert);
@@ -62,8 +61,7 @@ public class ClimbSubsystem extends SubsystemBase {
     climb1.configPeakOutputReverse(-1, Constants.kclimb1TimeoutMs);
 
     /**
-     * Config the allowable closed-loop error, Closed-Loop output will be neutral
-     * within this range.
+     * Config the allowable closed-loop error, Closed-Loop output will be neutral within this range.
      * See Table in Section 17.2.1 for native units per rotation.
      */
     climb1.configAllowableClosedloopError(
@@ -89,8 +87,7 @@ public class ClimbSubsystem extends SubsystemBase {
     climb2.setSensorPhase(Constants.kclimb2SensorPhase);
 
     /**
-     * Set based on what direction you want forward/positive to be. This does not
-     * affect sensor
+     * Set based on what direction you want forward/positive to be. This does not affect sensor
      * phase.
      */
     climb2.setInverted(Constants.kclimb2MotorInvert);
@@ -112,8 +109,7 @@ public class ClimbSubsystem extends SubsystemBase {
     climb2.configPeakOutputReverse(-1, Constants.kclimb2TimeoutMs);
 
     /**
-     * Config the allowable closed-loop error, Closed-Loop output will be neutral
-     * within this range.
+     * Config the allowable closed-loop error, Closed-Loop output will be neutral within this range.
      * See Table in Section 17.2.1 for native units per rotation.
      */
     climb2.configAllowableClosedloopError(
@@ -129,55 +125,67 @@ public class ClimbSubsystem extends SubsystemBase {
   /// Motor 1 Methods ////
   public static double GetMotorOutputPercentR1() {
     return (climb1.getMotorOutputPercent());
-  };
+  }
+  ;
 
   public static double GetSelectedSensorPositionR1() {
     return (climb1.getSelectedSensorPosition(0));
-  };
+  }
+  ;
 
   public double GetClosedLoopErrorR1() {
     return (climb1.getClosedLoopError(0));
-  };
+  }
+  ;
 
   public ControlMode GetControlModeR1() {
     return (climb1.getControlMode());
-  };
+  }
+  ;
 
   public void SetTargetPositionClimb1(double targetPositionRotations) {
     climb1.set(ControlMode.Position, targetPositionRotations);
     GlobalStatus.Global_Climb1_position = targetPositionRotations;
-  };
+  }
+  ;
 
   public void SetPercentOutputR1(double percentoutput) {
     climb1.set(ControlMode.PercentOutput, percentoutput);
-  };
+  }
+  ;
 
   /// Motor 2 Methods ////
 
   public static double GetMotorOutputPercentR2() {
     return (climb2.getMotorOutputPercent());
-  };
+  }
+  ;
 
   public static double GetSelectedSensorPositionR2() {
     return (climb2.getSelectedSensorPosition(0));
-  };
+  }
+  ;
 
   public double GetClosedLoopErrorR2() {
     return (climb2.getClosedLoopError(0));
-  };
+  }
+  ;
 
   public ControlMode GetControlModeR2() {
     return (climb2.getControlMode());
-  };
+  }
+  ;
 
   public void SetTargetPositionClimb2(double targetPositionRotations) {
     climb2.set(ControlMode.Position, targetPositionRotations);
     GlobalStatus.Global_Climb2_position = targetPositionRotations;
-  };
+  }
+  ;
 
   public void SetPercentOutputR2(double percentoutput) {
     climb2.set(ControlMode.PercentOutput, percentoutput);
-  };
+  }
+  ;
 
   // public void SetTargetRotStart() {
   // climb1.set(ControlMode.Position, Constants.START_ROT_PRESET);
@@ -208,7 +216,8 @@ public class ClimbSubsystem extends SubsystemBase {
   public void stop() {
     climb1.set(ControlMode.PercentOutput, 0);
     climb2.set(ControlMode.PercentOutput, 0);
-  };
+  }
+  ;
 
   @Override
   public void periodic() {

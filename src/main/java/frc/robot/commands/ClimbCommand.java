@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -27,7 +26,6 @@ public class ClimbCommand extends Command {
   private final JoystickButton climboverrideButton;
   private final JoystickButton autolevelButton;
 
-
   double targetPositionRotations = 0;
   /** Used to create string thoughout loop */
   StringBuilder _sb = new StringBuilder();
@@ -46,7 +44,7 @@ public class ClimbCommand extends Command {
       ClimbSubsystem climbsubsystem,
       JoystickButton climboverrideButton,
       JoystickButton autoleveButton,
-       DoubleSupplier translationRSupplier) {
+      DoubleSupplier translationRSupplier) {
     this.climbsubsystem = climbsubsystem;
     this.climboverrideButton = climboverrideButton;
     this.autolevelButton = autoleveButton;
@@ -85,7 +83,7 @@ public class ClimbCommand extends Command {
       climbsubsystem.SetPercentOutputR1(climbcontrol * Constants.OV_CLIMB);
       climbsubsystem.SetPercentOutputR2(climbcontrol * Constants.OV_CLIMB);
     } else if (autolevelButton.getAsBoolean()) {
-      ///*** NEED TO FINISH *** */
+      /// *** NEED TO FINISH *** */
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
         targetPositionRotations = Constants.AUTO_LEVEL_PRESET; // No offest
       } else {
@@ -99,7 +97,7 @@ public class ClimbCommand extends Command {
 
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
         targetPositionRotations = climbcontrol * Constants.CLIMB_MAX;
-      } 
+      }
       climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
       climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);
     }
