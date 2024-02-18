@@ -50,17 +50,17 @@ public class RobotContainer {
       XStanceButton = new JoystickButton(drivejoystick, 2),
       ResetGyroButton = new JoystickButton(drivejoystick, 3),
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
-      Autolevel = new JoystickButton(drivejoystick, 5),
-      Medgoal = new JoystickButton(drivejoystick, 6),
+      IntakeoverrideButton = new JoystickButton(drivejoystick, 5),
+      Autolevel = new JoystickButton(drivejoystick, 6),
       Drvgoal = new JoystickButton(drivejoystick, 7),
       ExtendOveride = new JoystickButton(drivejoystick, 8),
-      button9 = new JoystickButton(drivejoystick, 9),
+      IntakeButton = new JoystickButton(drivejoystick, 9),
       ClimboverrideButton = new JoystickButton(drivejoystick, 10);
   // button11 = new JoystickButton(drivejoystick, 11);
   // button12 = new JoystickButton(drivejoystick, 12);
 
   private Drivetrain drivetrain;
-  private IntakeSubsystem armcontrol;
+  private IntakeSubsystem intakesubsystem;
   private ClimbSubsystem climbcontrol;
   private ShootSubsystem clawscontrol;
 
@@ -133,7 +133,7 @@ public class RobotContainer {
                     MAX_VELOCITY_METERS_PER_SECOND);
 
             drivetrain = new Drivetrain(gyro, flModule, frModule, blModule, brModule);
-            armcontrol = new IntakeSubsystem();
+            intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
             clawscontrol = new ShootSubsystem();
             //        new Vision(new VisionIOPhotonVision(CAMERA_NAME));
@@ -153,7 +153,7 @@ public class RobotContainer {
             SwerveModule brModule =
                 new SwerveModule(new SwerveModuleIOSim(), 3, MAX_VELOCITY_METERS_PER_SECOND);
             drivetrain = new Drivetrain(new GyroIO() {}, flModule, frModule, blModule, brModule);
-            armcontrol = new IntakeSubsystem();
+            intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
             clawscontrol = new ShootSubsystem();
 
@@ -184,7 +184,7 @@ public class RobotContainer {
       SwerveModule brModule =
           new SwerveModule(new SwerveModuleIO() {}, 3, MAX_VELOCITY_METERS_PER_SECOND);
       drivetrain = new Drivetrain(new GyroIO() {}, flModule, frModule, blModule, brModule);
-      armcontrol = new IntakeSubsystem();
+      intakesubsystem  = new IntakeSubsystem();
       climbcontrol = new ClimbSubsystem();
       clawscontrol = new ShootSubsystem();
       //  new Vision(new VisionIO() {});
@@ -235,14 +235,12 @@ public class RobotContainer {
             () -> -drivejoystick.getRawAxis(0),
             () -> -drivejoystick.getRawAxis(3))); // field vs robot drive
 
-    armcontrol.setDefaultCommand(
+    intakesubsystem.setDefaultCommand(
         new IntakeCommand( // use same button for preset rotate and extend
-            armcontrol,
-            ExtendOveride,
-            Medgoal,
-            Autolevel,
-            Drvgoal,
-            () -> drivejoystick.getRawAxis(4)));
+            intakesubsystem,
+            IntakeoverrideButton,
+           IntakeButton
+        ));
 
     climbcontrol.setDefaultCommand(
         new ClimbCommand(

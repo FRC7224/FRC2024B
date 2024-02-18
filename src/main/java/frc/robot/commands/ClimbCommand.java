@@ -58,12 +58,12 @@ public class ClimbCommand extends Command {
   public void execute() {
     /* Gamepad processing */
 
-    double rotatecontrol = modifyAxis(translationRSupplier.getAsDouble());
+    double climbcontrol = modifyAxis(translationRSupplier.getAsDouble());
 
     double motorOutput;
 
     /* Get Talon/Victor's current output percentage */
-    motorOutput = IntakeSubsystem.GetMotorOutputPercent();
+    motorOutput = ClimbSubsystem.GetMotorOutputPercentR1();
 
     /* Prepare line to print */
     _sb.append("\tout:");
@@ -72,7 +72,7 @@ public class ClimbCommand extends Command {
     _sb.append("%"); // Percent
 
     _sb.append("\tpos:");
-    _sb.append(IntakeSubsystem.GetSelectedSensorPosition());
+    _sb.append(ClimbSubsystem.GetSelectedSensorPositionR1());
     _sb.append("u"); // Native units
 
     /**
@@ -82,8 +82,8 @@ public class ClimbCommand extends Command {
     if (climboverrideButton.getAsBoolean()) {
       /* When button is held, just straight drive */
       /* Percent Output */
-      climbsubsystem.SetPercentOutputR1(rotatecontrol * Constants.OV_ROT_ARM);
-      climbsubsystem.SetPercentOutputR2(rotatecontrol * Constants.OV_ROT_ARM);
+      climbsubsystem.SetPercentOutputR1(climbcontrol * Constants.OV_CLIMB);
+      climbsubsystem.SetPercentOutputR2(climbcontrol * Constants.OV_CLIMB);
     } else if (autolevelButton.getAsBoolean()) {
       ///*** NEED TO FINISH *** */
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
@@ -98,7 +98,7 @@ public class ClimbCommand extends Command {
       /* x *  Rotations * 4096 u/rev in either direction */
 
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = rotatecontrol * Constants.CLIMB_MAX;
+        targetPositionRotations = climbcontrol * Constants.CLIMB_MAX;
       } 
       climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
       climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);

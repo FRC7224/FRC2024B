@@ -142,7 +142,7 @@ public final class Constants {
 
   public static double CLIMB_MAX = 12.05 * 4096;
    public static double AUTO_LEVEL_PRESET= 12.05 * 4096;
-  public static double OV_ROT_ARM = 0.1;
+  public static double OV_CLIMB = 0.1;
 
   /**
    * Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3. Only the

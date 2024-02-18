@@ -27,14 +27,14 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   /** Set Intake off  */
-  public void SetIntakeStop() {
+  public void SetIntakeOff() {
      intake.set(0);
   }
 
   /** Set the elevator speed */
   public void SetElevatorOn() {
-    elevator1.set(Constants.INTAKE_SPEED);
-    elevator2.set(Constants.INTAKE_SPEED);
+    elevator1.set(Constants.ELEVATOR_SPEED);
+    elevator2.set(Constants.ELEVATOR_SPEED);
   }
 
   /** Set elevator off  */
