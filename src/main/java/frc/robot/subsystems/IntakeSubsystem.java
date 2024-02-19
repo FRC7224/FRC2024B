@@ -12,9 +12,9 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
 
   private static WPI_TalonSRX intake = new WPI_TalonSRX(Constants.INTAKE_PORT);
-  private static CANSparkMax elevator1 =
+  private static CANSparkMax elevatorleft =
       new CANSparkMax(Constants.ELEVATOR_L, MotorType.kBrushless);
-  private static CANSparkMax elevator2 =
+  private static CANSparkMax elevatorright =
       new CANSparkMax(Constants.ELEVATOR_R, MotorType.kBrushless);
 
   // private final Timer timer = new Timer();
@@ -33,16 +33,23 @@ public class IntakeSubsystem extends SubsystemBase {
 
   /** Set the elevator speed */
   public void SetElevatorOn() {
-    elevator1.set(Constants.ELEVATOR_SPEED);
-    elevator2.set(Constants.ELEVATOR_SPEED);
+    elevatorleft.set(Constants.ELEVATOR_SPEED);
+    elevatorright.set(Constants.ELEVATOR_SPEED);
   }
 
   /** Set elevator off */
   public void SetElevatorOff() {
-    elevator1.set(0);
-    elevator2.set(0);
+    elevatorleft.set(0);
+    elevatorright.set(0);
   }
 
+  /**
+   * Squares the specified value, while preserving the sign. This method is used on all joystick
+   * inputs. This is useful as a non-linear range is more natural for the driver.
+   *
+   * @param value
+   * @return
+   */
   @Override
   public void periodic() {
 

@@ -29,6 +29,7 @@ import frc.lib.team3061.swerve.SwerveModuleIOTalonFX;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -46,7 +47,7 @@ public class RobotContainer {
   // private OperatorInterface oi = new OperatorInterface() {};
 
   final Joystick drivejoystick = new Joystick(0);
-  JoystickButton Shoot = new JoystickButton(drivejoystick, 1),
+  JoystickButton ShootButton = new JoystickButton(drivejoystick, 1),
       XStanceButton = new JoystickButton(drivejoystick, 2),
       ResetGyroButton = new JoystickButton(drivejoystick, 3),
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
@@ -78,7 +79,7 @@ public class RobotContainer {
     // specified
     if (Constants.getMode() != Mode.REPLAY) {
       switch (Constants.getRobot()) {
-        case ROBOT_2023_SEASON:
+        case ROBOT_2024_SEASON:
           {
             // GyroIO gyro = new Nax X2
             // The important thing about how you configure your gyroscope is that rotating
@@ -239,6 +240,10 @@ public class RobotContainer {
         new IntakeCommand( // use same button for preset rotate and extend
             intakesubsystem, IntakeoverrideButton, IntakeButton));
 
+    shootsubsystem.setDefaultCommand(
+        new ShootCommand( // use same button for preset rotate and extend
+            shootsubsystem, ShootButton, () -> drivejoystick.getRawAxis(4)));
+
     climbcontrol.setDefaultCommand(
         new ClimbCommand(
             climbcontrol, ClimboverrideButton, Autolevel, () -> -drivejoystick.getRawAxis(2)));
@@ -268,12 +273,12 @@ public class RobotContainer {
 
     // reset close ope claw
 
-    Shoot.onFalse(
+    ShootButton.onFalse(
         Commands.parallel(
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
-            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
+            Commands.runOnce(drivetrain::enableFieldRelative, drivetrain)));
 
-    Shoot.onTrue(Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
+    ShootButton.onTrue(Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
 
     // x-stance
     XStanceButton.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));

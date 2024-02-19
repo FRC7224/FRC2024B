@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
+    id "edu.wpi.first.GradleRIO" version "2024.2.1"
     id 'com.diffplug.spotless' version '6.11.0'
     id "com.peterabeles.gversion" version "1.10"
 }
@@ -77,6 +77,9 @@ dependencies {
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:2.0.0"
 
     implementation "gov.nist.math:jama:1.0.3"
+
+    def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
+    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
 }
 
 test {
@@ -181,6 +184,11 @@ gversion {
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-Xlint:-deprecation,-removal'
 }
+task(checkAkitInstall, dependsOn: "classes", type: JavaExec) {
+    mainClass = "org.littletonrobotics.junction.CheckInstall"
+    classpath = sourceSets.main.runtimeClasspath
+}
 
 project.compileJava.dependsOn(createVersionFile)
 build.dependsOn(spotlessApply)
+compileJava.finalizedBy checkAkitInstall
