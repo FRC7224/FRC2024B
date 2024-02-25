@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
+// import com.google.flatbuffers.Constants;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
@@ -21,6 +23,7 @@ public class IntakeCommand extends Command {
   private final IntakeSubsystem intakesubsystem;
   private final JoystickButton intakeoverrideButton;
   private final JoystickButton intakeButton;
+  private boolean InTakeInProgress = false;
   private final Timer timer = new Timer();
 
   public IntakeCommand(
@@ -43,50 +46,46 @@ public class IntakeCommand extends Command {
 
     /* Get Talon/Victor's current output percentage */
     /** */
+    boolean ballloaded;
+    ballloaded = intakesubsystem.GetNoteLoadStatus();
+
+    if (intakeButton.getAsBoolean()) {
+      timer.start();
+      timer.reset();
+    }
+    ;
+
     if (intakeoverrideButton.getAsBoolean()) {
       /* When button is held override */
       /* Percent Output */
       intakesubsystem.SetIntakeOn();
       intakesubsystem.SetElevatorOn();
-    } else if (intakeButton.getAsBoolean()) {
-
-      intakesubsystem.SetIntakeOn();
-      intakesubsystem.SetElevatorOn();
-    }
-    intakesubsystem.SetIntakeOff();
-    intakesubsystem.SetElevatorOff();
-  }
-
-  /*
-    if (launchInProgress) {
-      if (timer.get() <= Constants.kshooterTimer_spin) {
-          System.out.print("spinup");
-          m_shootsubsystem.setShootSpeed(zonePosition);
-
-      } else if (timer.get() <= Constants.kshooterTimer_timer) {
-          System.out.print("shoot ing");
-          m_shootsubsystem.setShootSpeed(zonePosition);
-          m_shootsubsystem.setelvSpeed(Constants.kelvspeed);
-          ballshot = true;
-          if (timer.get() <= (Constants.kshooterTimer_timer+ 0.75)){  // 0.5 second before pushing
-              m_shootsubsystem.pushBall();
-          }
-      } else {
-          launchInProgress = false;
+    } else if (intakeButton.getAsBoolean() || (InTakeInProgress)) {
+      InTakeInProgress = true;
+      if (timer.get() <= Constants.INTAKE_TIMER) {
+        if (ballloaded = false) { //  ball bot loaded and time active
+          intakesubsystem.SetIntakeOn();
+          intakesubsystem.SetElevatorOn();
+        } else { // Ball loaded stop and reset
+          InTakeInProgress = false;
+          intakesubsystem.SetIntakeOff();
+          intakesubsystem.SetElevatorOff();
           timer.reset();
           timer.stop();
+        }
+      } else { // timer expired clean up and reset
+        InTakeInProgress = false;
+        intakesubsystem.SetIntakeOff();
+        intakesubsystem.SetElevatorOff();
+        timer.reset();
+        timer.stop();
       }
-  } else {
-      m_shootsubsystem.stopshooter();
-      m_shootsubsystem.setelvSpeed(0);
-      m_shootsubsystem.resetBallPush();
-      if (ballshot) { // first time after a ball has been shot
-      //    new SequentialCommandGroup(new MoveBalltoShooterTimed(m_intakesubsystem));
-          Constants.LAUNCHREADY = false;
-          ballshot = false;
-          launchReady = false;
-      }
-
-  */
-
+    } else { // cleanup after override botton
+      InTakeInProgress = false;
+      intakesubsystem.SetIntakeOff();
+      intakesubsystem.SetElevatorOff();
+      timer.reset();
+      timer.stop();
+    }
+  }
 }

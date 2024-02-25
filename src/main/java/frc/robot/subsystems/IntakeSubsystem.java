@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,6 +17,7 @@ public class IntakeSubsystem extends SubsystemBase {
       new CANSparkMax(Constants.ELEVATOR_L, MotorType.kBrushless);
   private static CANSparkMax elevatorright =
       new CANSparkMax(Constants.ELEVATOR_R, MotorType.kBrushless);
+  DigitalInput ballLoaded = new DigitalInput(Constants.NOTE_SENSOR_CHANNEL);
 
   // private final Timer timer = new Timer();
 
@@ -44,9 +46,15 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   /**
-   * Squares the specified value, while preserving the sign. This method is used on all joystick
-   * inputs. This is useful as a non-linear range is more natural for the driver.
+   * return the status if the ball is loaded in the shooter sets gloabl LAUNCHREADY stste
    *
+   * @return
+   */
+  public boolean GetNoteLoadStatus() {
+    return (ballLoaded.get());
+  }
+
+  /**
    * @param value
    * @return
    */

@@ -29,7 +29,6 @@ import frc.lib.team3061.swerve.SwerveModuleIOTalonFX;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -53,7 +52,7 @@ public class RobotContainer {
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
       IntakeoverrideButton = new JoystickButton(drivejoystick, 5),
       Autolevel = new JoystickButton(drivejoystick, 6),
-      Drvgoal = new JoystickButton(drivejoystick, 7),
+      ShootButtonLow = new JoystickButton(drivejoystick, 7),
       ExtendOveride = new JoystickButton(drivejoystick, 8),
       IntakeButton = new JoystickButton(drivejoystick, 9),
       ClimboverrideButton = new JoystickButton(drivejoystick, 10);
@@ -240,9 +239,9 @@ public class RobotContainer {
         new IntakeCommand( // use same button for preset rotate and extend
             intakesubsystem, IntakeoverrideButton, IntakeButton));
 
-    shootsubsystem.setDefaultCommand(
-        new ShootCommand( // use same button for preset rotate and extend
-            shootsubsystem, ShootButton, () -> drivejoystick.getRawAxis(4)));
+    //  shootsubsystem.setDefaultCommand(
+    //      new ShootCommand( // use same button for preset rotate and extend
+    //          shootsubsystem, ShootButton, () -> drivejoystick.getRawAxis(4)));
 
     climbcontrol.setDefaultCommand(
         new ClimbCommand(
@@ -271,14 +270,23 @@ public class RobotContainer {
             Commands.runOnce(drivetrain::enableFieldRelative, drivetrain),
             drivetrain::getFieldRelative));
 
-    // reset close ope claw
+    // Shoot High
+    ShootButton.onTrue(
+        Commands.sequence(
+            Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+            Commands.waitSeconds(1.0), // wait for spin up
+            Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
+            Commands.waitSeconds(1.0), // wait for shot
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
-    ShootButton.onFalse(
-        Commands.parallel(
-            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
-            Commands.runOnce(drivetrain::enableFieldRelative, drivetrain)));
-
-    ShootButton.onTrue(Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
+    // Shoot High
+    ShootButtonLow.onTrue(
+        Commands.sequence(
+            Commands.runOnce(shootsubsystem::setShootSpeedLow, shootsubsystem),
+            Commands.waitSeconds(0.5), // wait for spin up
+            Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
+            Commands.waitSeconds(1.0), // wait for shot
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
     // x-stance
     XStanceButton.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));

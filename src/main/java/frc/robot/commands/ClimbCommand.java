@@ -95,6 +95,24 @@ public class ClimbCommand extends Command {
       /* Position Closed Loop */
       /* x *  Rotations * 4096 u/rev in either direction */
 
+      /*
+            if (climbcontrol <= 0.0) {
+              climbcontrol = 0;
+            }
+            targetPositionRotations = (climbcontrol * Constants.MAX_CLIMB);
+            if ((Math.abs(GlobalStatus.Global_Rotate1_position) <= Constants.LOW48_ROT)
+                && (targetPositionRotations >= Constants.MAX48_ARM)) {
+              targetPositionRotations = Constants.MAX48_ARM;
+            }
+            ;
+
+            if ((Math.abs(GlobalStatus.Global_Rotate1_position) >= Constants.HIGH48_ROT)
+                && (targetPositionRotations >= Constants.MAX48_ARM)) {
+              targetPositionRotations = Constants.MAX48_ARM;
+            }
+
+      */
+
       if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
         targetPositionRotations = climbcontrol * Constants.CLIMB_MAX;
       }

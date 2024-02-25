@@ -26,11 +26,11 @@ public final class Constants {
 
   public static int CLIMB_PORT_R = 14;
   public static int CLIMB_PORT_L = 15;
-  public static int INTAKE_PORT = 16;
-  public static int ELEVATOR_R = 17;
-  public static int ELEVATOR_L = 18;
-  public static int SHOOT_PORT_R = 19;
-  public static int SHOOT_PORT_L = 20;
+  public static int ELEVATOR_R = 16;
+  public static int ELEVATOR_L = 17;
+  public static int SHOOT_PORT_R = 18;
+  public static int SHOOT_PORT_L = 19;
+  public static int INTAKE_PORT = 20;
 
   public static final double LOOP_PERIOD_SECS = 0.02;
 
@@ -92,7 +92,9 @@ public final class Constants {
   public static double PITCH_CAL_OFFSET = 0;
 
   ////// Intake Constants ///////////////////////////
+  public static double INTAKE_TIMER = 3.0;
   public static double INTAKE_SPEED = -0.1;
+  public static int NOTE_SENSOR_CHANNEL = 4;
 
   ////// Elevator Constants ///////////////////////////
   public static double ELEVATOR_SPEED = -0.1;
@@ -201,17 +203,14 @@ public final class Constants {
   /** *** shoot constants */
 
   // Shooter / Elevator Constants
-  public static double kL0 = 250;
+  public static int ZONE_LOW = 0;
 
-  public static double kL1 = 1000;
-  public static double kL2 = 1500;
+  public static int ZONE_HIGH = 1;
+  public static double kL0 = 250;
+  public static double kL1 = 1500;
 
   public static double kR0 = 250;
-  public static double kR1 = 1000;
-  public static double kR2 = 1500;
-
-  public static double SHOOT_BOTTOM = 166;
-  public static double SHOOT_MIDDLE = 333;
+  public static double kR1 = 1500;
 
   public static int kshortshootzone = 26;
   public static double kelvspeed = -0.7;

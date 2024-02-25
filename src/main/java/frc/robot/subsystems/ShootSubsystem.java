@@ -3,9 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+@SuppressWarnings("removal")
 
 /** */
 public class ShootSubsystem extends SubsystemBase {
@@ -14,9 +15,7 @@ public class ShootSubsystem extends SubsystemBase {
   private WPI_TalonFX shootMotorLeft = new WPI_TalonFX(Constants.SHOOT_PORT_R, "rio");
 
   Zone[] zones = {
-    new Zone(Constants.kL0, Constants.kR0),
-    new Zone(Constants.kL1, Constants.kR1),
-    new Zone(Constants.kL2, Constants.kR2),
+    new Zone(Constants.kL0, Constants.kR0), new Zone(Constants.kL1, Constants.kR1),
   };
 
   /** */
@@ -65,10 +64,14 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   /** sets the shooter speed */
-  public void setShootSpeed(int zoneposition) {
-    // shootMotor1.set(speed);
-    SmartDashboard.putNumber("top", zones[zoneposition].getTopMotor());
-    SmartDashboard.putNumber("zoneposition", zoneposition);
+  public void setShootSpeedLow() {
+    int zoneposition = Constants.ZONE_LOW;
+    shootMotorRight.set(ControlMode.Velocity, zones[zoneposition].getTopMotor());
+    shootMotorLeft.set(ControlMode.Velocity, zones[zoneposition].getBottomMotor());
+  }
+
+  public void setShootSpeedHigh() {
+    int zoneposition = Constants.ZONE_HIGH;
     shootMotorRight.set(ControlMode.Velocity, zones[zoneposition].getTopMotor());
     shootMotorLeft.set(ControlMode.Velocity, zones[zoneposition].getBottomMotor());
   }
