@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
@@ -59,10 +58,8 @@ public class ClimbCommand extends Command {
     double climbcontrol = modifyAxis(translationRSupplier.getAsDouble());
 
     double motorOutput;
-
     /* Get Talon/Victor's current output percentage */
     motorOutput = ClimbSubsystem.GetMotorOutputPercentR1();
-
     /* Prepare line to print */
     _sb.append("\tout:");
     /* Cast to int to remove decimal places */
@@ -84,74 +81,25 @@ public class ClimbCommand extends Command {
       climbsubsystem.SetPercentOutputR2(climbcontrol * Constants.OV_CLIMB);
     } else if (autolevelButton.getAsBoolean()) {
       /// *** NEED TO FINISH *** */
-      if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = Constants.AUTO_LEVEL_PRESET; // No offest
-      } else {
-        targetPositionRotations = Constants.AUTO_LEVEL_PRESET;
-      }
+
       climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
-      climbsubsystem.SetTargetPositionClimb2(-targetPositionRotations);
+      climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);
     } else {
-      /* Position Closed Loop */
-      /* x *  Rotations * 4096 u/rev in either direction */
-
-      /*
-            if (climbcontrol <= 0.0) {
-              climbcontrol = 0;
-            }
-            targetPositionRotations = (climbcontrol * Constants.MAX_CLIMB);
-            if ((Math.abs(GlobalStatus.Global_Rotate1_position) <= Constants.LOW48_ROT)
-                && (targetPositionRotations >= Constants.MAX48_ARM)) {
-              targetPositionRotations = Constants.MAX48_ARM;
-            }
-            ;
-
-            if ((Math.abs(GlobalStatus.Global_Rotate1_position) >= Constants.HIGH48_ROT)
-                && (targetPositionRotations >= Constants.MAX48_ARM)) {
-              targetPositionRotations = Constants.MAX48_ARM;
-            }
-
-      */
-
-      if (targetPositionRotations >= 0) { // check to see if arm is rotated backwards
-        targetPositionRotations = climbcontrol * Constants.CLIMB_MAX;
+      targetPositionRotations = climbcontrol * Constants.CLIMB_MAX;
+      if (targetPositionRotations >= Constants.CLIMB_MAX_HEIGHT) {
+        targetPositionRotations = Constants.CLIMB_MAX_HEIGHT;
+      } else if (targetPositionRotations <= Constants.CLIMB_MIN_HEIGHT) {
+        targetPositionRotations = Constants.CLIMB_MIN_HEIGHT;
       }
       climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
       climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);
     }
-
-    /* If Talon is in position closed-loop, print some more info */
-    if (climbsubsystem.GetControlModeR1() == ControlMode.Position) {
-      /* ppend more signals to print when in speed mode. */
-      _sb.append("\terr R1:");
-      _sb.append(climbsubsystem.GetClosedLoopErrorR1());
-      _sb.append("u"); // Native Units
-
-      _sb.append("\terr R2:");
-      _sb.append(climbsubsystem.GetClosedLoopErrorR2());
-      _sb.append("u"); // Native Units
-
-      _sb.append("\ttrg:");
-      _sb.append(targetPositionRotations);
-      _sb.append("u"); // / Native Units
-    }
-
-    /** Print every ten loops, printing too much too fast is generally bad for performance. */
-    if (++_loops >= 10) {
-      _loops = 0;
-      System.out.println(_sb.toString());
-    }
-
-    /* Reset built string for next loop */
-    _sb.setLength(0);
   }
 
   @Override
   public void end(boolean interrupted) {
     this.climbsubsystem.stop();
-
     super.end(interrupted);
-
     Logger.recordOutput("ActiveCommands/TeleopSwerve", false);
   }
 

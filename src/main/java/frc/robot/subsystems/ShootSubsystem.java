@@ -1,8 +1,9 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -11,75 +12,121 @@ import frc.robot.Constants;
 /** */
 public class ShootSubsystem extends SubsystemBase {
 
-  private WPI_TalonFX shootMotorRight = new WPI_TalonFX(Constants.SHOOT_PORT_L, "rio");
-  private WPI_TalonFX shootMotorLeft = new WPI_TalonFX(Constants.SHOOT_PORT_R, "rio");
-
-  Zone[] zones = {
-    new Zone(Constants.kL0, Constants.kR0), new Zone(Constants.kL1, Constants.kR1),
-  };
-
+  private CANSparkMax shootMotorRight =
+      new CANSparkMax(
+          Constants.SHOOT_PORT_R, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+  private CANSparkMax shootMotorLeft =
+      new CANSparkMax(
+          Constants.SHOOT_PORT_L, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+  private SparkPIDController m_pidControllerRight;
+  private SparkPIDController m_pidControllerLeft;
+  private RelativeEncoder m_encoderRight;
+  private RelativeEncoder m_encoderLeft;
   /** */
   public ShootSubsystem() {
     /*
      * sets up RIGHT shooter with PID
      */
-    shootMotorRight.configFactoryDefault();
-    shootMotorRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    shootMotorRight.set(ControlMode.Velocity, 0);
-    shootMotorRight.setInverted(false);
-    shootMotorRight.setSensorPhase(true);
+    /**
+     * The RestoreFactoryDefaults method can be used to reset the configuration parameters in the
+     * SPARK MAX to their factory default state. If no argument is passed, these parameters will not
+     * persist between power cycles
+     */
+    shootMotorRight.restoreFactoryDefaults();
 
-    /*  RIGHT Config the peak and nominal outputs */
-    shootMotorRight.configNominalOutputForward(0, Constants.kTimeoutMs);
-    shootMotorRight.configNominalOutputReverse(0, Constants.kTimeoutMs);
-    shootMotorRight.configPeakOutputForward(100, Constants.kTimeoutMs);
-    shootMotorRight.configPeakOutputReverse(9, Constants.kTimeoutMs);
+    /**
+     * In order to use PID functionality for a controller, a SparkPIDController object is
+     * constructed by calling the getPIDController() method on an existing CANSparkMax object
+     */
+    m_pidControllerRight = shootMotorRight.getPIDController();
 
-    /* RIGHT Config the Velocity closed loop gains in slot0 */
-    shootMotorRight.config_kF(Constants.kPIDLoopIdx, Constants.kshootRightF, Constants.kTimeoutMs);
-    shootMotorRight.config_kP(Constants.kPIDLoopIdx, Constants.kshootRightP, Constants.kTimeoutMs);
-    shootMotorRight.config_kI(Constants.kPIDLoopIdx, Constants.kshootRightI, Constants.kTimeoutMs);
-    shootMotorRight.config_kD(Constants.kPIDLoopIdx, Constants.kshootRightD, Constants.kTimeoutMs);
+    // Encoder object created to display position values
+    m_encoderRight = shootMotorRight.getEncoder();
+
+    // set PID coefficients
+    m_pidControllerRight.setP(Constants.kshootRightP);
+    m_pidControllerRight.setI(Constants.kshootRightI);
+    m_pidControllerRight.setD(Constants.kshootRightD);
+    m_pidControllerRight.setIZone(Constants.kshootRightIz);
+    m_pidControllerRight.setFF(Constants.kshootRightF);
+    m_pidControllerRight.setOutputRange(
+        Constants.kshootRightkMinOutput, Constants.kshootRightkMinOutput);
+
+    // display PID coefficients on SmartDashboard
+    SmartDashboard.putNumber("R P Gain", Constants.kshootRightP);
+    SmartDashboard.putNumber("R I Gain", Constants.kshootRightI);
+    SmartDashboard.putNumber("R D Gain", Constants.kshootRightD);
+    SmartDashboard.putNumber("R I Zone", Constants.kshootRightIz);
+    SmartDashboard.putNumber("R Feed Forward", Constants.kshootRightF);
+    SmartDashboard.putNumber("R Max Output", Constants.kshootRightkMinOutput);
+    SmartDashboard.putNumber("R Min Output", Constants.kshootRightkMinOutput);
 
     /*
      * sets up LEFT shooter with PID
      */
-    shootMotorLeft.configFactoryDefault();
-    shootMotorLeft.set(ControlMode.Velocity, 0);
-    shootMotorLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    shootMotorLeft.setSensorPhase(true);
-    shootMotorLeft.setInverted(false);
+    /**
+     * The RestoreFactoryDefaults method can be used to reset the configuration parameters in the
+     * SPARK MAX to their factory default state. If no argument is passed, these parameters will not
+     * persist between power cycles
+     */
+    shootMotorLeft.restoreFactoryDefaults();
 
-    /* LEFT Config the peak and nominal outputs */
-    shootMotorLeft.configNominalOutputForward(0, Constants.kTimeoutMs);
-    shootMotorLeft.configNominalOutputReverse(0, Constants.kTimeoutMs);
-    shootMotorLeft.configPeakOutputForward(100, Constants.kTimeoutMs);
-    shootMotorLeft.configPeakOutputReverse(0, Constants.kTimeoutMs);
+    /**
+     * In order to use PID functionality for a controller, a SparkPIDController object is
+     * constructed by calling the getPIDController() method on an existing CANSparkMax object
+     */
+    m_pidControllerLeft = shootMotorLeft.getPIDController();
 
-    /* LEFT Config the Velocity closed loop gains in slot0 */
-    shootMotorLeft.config_kF(Constants.kPIDLoopIdx, Constants.kshootLeftF, Constants.kTimeoutMs);
-    shootMotorLeft.config_kP(Constants.kPIDLoopIdx, Constants.kshootLeftP, Constants.kTimeoutMs);
-    shootMotorLeft.config_kI(Constants.kPIDLoopIdx, Constants.kshootLeftI, Constants.kTimeoutMs);
-    shootMotorLeft.config_kD(Constants.kPIDLoopIdx, Constants.kshootLeftD, Constants.kTimeoutMs);
+    // Encoder object created to display position values
+    m_encoderLeft = shootMotorLeft.getEncoder();
+
+    // set PID coefficients
+    m_pidControllerLeft.setP(Constants.kshootLeftP);
+    m_pidControllerLeft.setI(Constants.kshootLeftI);
+    m_pidControllerLeft.setD(Constants.kshootLeftD);
+    m_pidControllerLeft.setIZone(Constants.kshootLeftIz);
+    m_pidControllerLeft.setFF(Constants.kshootLeftF);
+    m_pidControllerLeft.setOutputRange(
+        Constants.kshootLeftkMinOutput, Constants.kshootLeftkMinOutput);
+
+    // display PID coefficients on SmartDashboard
+    SmartDashboard.putNumber("R P Gain", Constants.kshootLeftP);
+    SmartDashboard.putNumber("R I Gain", Constants.kshootLeftI);
+    SmartDashboard.putNumber("R D Gain", Constants.kshootLeftD);
+    SmartDashboard.putNumber("R I Zone", Constants.kshootLeftIz);
+    SmartDashboard.putNumber("R Feed Forward", Constants.kshootLeftF);
+    SmartDashboard.putNumber("R Max Output", Constants.kshootLeftkMinOutput);
+    SmartDashboard.putNumber("R Min Output", Constants.kshootLeftkMinOutput);
   }
 
   /** sets the shooter speed */
   public void setShootSpeedLow() {
-    int zoneposition = Constants.ZONE_LOW;
-    shootMotorRight.set(ControlMode.Velocity, zones[zoneposition].getTopMotor());
-    shootMotorLeft.set(ControlMode.Velocity, zones[zoneposition].getBottomMotor());
+    shootMotorRight.set(-.4);
+    shootMotorLeft.set(.4);
+    SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+
+    //  m_pidControllerRight.setReference(Constants.ZONE_LOW, CANSparkMax.ControlType.kVelocity);
+    SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    //  m_pidControllerLeft.setReference(Constants.ZONE_LOW, CANSparkMax.ControlType.kVelocity);
   }
 
   public void setShootSpeedHigh() {
-    int zoneposition = Constants.ZONE_HIGH;
-    shootMotorRight.set(ControlMode.Velocity, zones[zoneposition].getTopMotor());
-    shootMotorLeft.set(ControlMode.Velocity, zones[zoneposition].getBottomMotor());
+
+    shootMotorRight.set(-.9);
+    shootMotorLeft.set(.9);
+    SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+    //    m_pidControllerRight.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
+    SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    //    m_pidControllerLeft.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
   }
 
-  /** stop the shooter speed */
   public void stopshooter() {
-    shootMotorRight.set(ControlMode.Velocity, 0);
-    shootMotorLeft.set(ControlMode.Velocity, 0);
+    SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+    SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    m_pidControllerLeft.setReference(0, CANSparkMax.ControlType.kVelocity);
+    m_pidControllerRight.setReference(0, CANSparkMax.ControlType.kVelocity);
+    shootMotorRight.stopMotor();
+    shootMotorLeft.stopMotor();
   }
 
   @Override

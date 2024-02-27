@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.GlobalStatus;
@@ -34,10 +35,8 @@ public class ClimbSubsystem extends SubsystemBase {
         TalonFXFeedbackDevice.IntegratedSensor,
         Constants.kclimb1PIDLoopIdx,
         Constants.kclimb1TimeoutMs);
-
     /* Ensure sensor is positive when output is positive */
     climb1.setSensorPhase(Constants.kclimb1SensorPhase);
-
     /**
      * Set based on what direction you want forward/positive to be. This does not affect sensor
      * phase.
@@ -53,13 +52,11 @@ public class ClimbSubsystem extends SubsystemBase {
      * sensor-phase
      */
     // climb1.setSensorPhase(true);
-
     /* Config the peak and nominal outputs, 12V means full */
     climb1.configNominalOutputForward(0, Constants.kclimb1TimeoutMs);
     climb1.configNominalOutputReverse(0, Constants.kclimb1TimeoutMs);
     climb1.configPeakOutputForward(1, Constants.kclimb1TimeoutMs);
     climb1.configPeakOutputReverse(-1, Constants.kclimb1TimeoutMs);
-
     /**
      * Config the allowable closed-loop error, Closed-Loop output will be neutral within this range.
      * See Table in Section 17.2.1 for native units per rotation.
@@ -85,7 +82,6 @@ public class ClimbSubsystem extends SubsystemBase {
 
     /* Ensure sensor is positive when output is positive */
     climb2.setSensorPhase(Constants.kclimb2SensorPhase);
-
     /**
      * Set based on what direction you want forward/positive to be. This does not affect sensor
      * phase.
@@ -101,7 +97,6 @@ public class ClimbSubsystem extends SubsystemBase {
      * sensor-phase
      */
     // climb1.setSensorPhase(true);
-
     /* Config the peak and nominal outputs, 12V means full */
     climb2.configNominalOutputForward(0, Constants.kclimb2TimeoutMs);
     climb2.configNominalOutputReverse(0, Constants.kclimb2TimeoutMs);
@@ -155,7 +150,6 @@ public class ClimbSubsystem extends SubsystemBase {
   ;
 
   /// Motor 2 Methods ////
-
   public static double GetMotorOutputPercentR2() {
     return (climb2.getMotorOutputPercent());
   }
@@ -179,6 +173,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public void SetTargetPositionClimb2(double targetPositionRotations) {
     climb2.set(ControlMode.Position, targetPositionRotations);
     GlobalStatus.Global_Climb2_position = targetPositionRotations;
+    SmartDashboard.putNumber("target climb", targetPositionRotations);
   }
   ;
 

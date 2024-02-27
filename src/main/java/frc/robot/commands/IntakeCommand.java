@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 // import com.google.flatbuffers.Constants;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
@@ -47,14 +48,15 @@ public class IntakeCommand extends Command {
     /* Get Talon/Victor's current output percentage */
     /** */
     boolean ballloaded;
-    ballloaded = intakesubsystem.GetNoteLoadStatus();
+    ballloaded = !intakesubsystem.GetNoteLoadStatus();
 
     if (intakeButton.getAsBoolean()) {
       timer.start();
       timer.reset();
     }
     ;
-
+    SmartDashboard.putBoolean("intake button", intakeButton.getAsBoolean());
+    SmartDashboard.putBoolean("intake override", intakeoverrideButton.getAsBoolean());
     if (intakeoverrideButton.getAsBoolean()) {
       /* When button is held override */
       /* Percent Output */
@@ -63,7 +65,9 @@ public class IntakeCommand extends Command {
     } else if (intakeButton.getAsBoolean() || (InTakeInProgress)) {
       InTakeInProgress = true;
       if (timer.get() <= Constants.INTAKE_TIMER) {
-        if (ballloaded = false) { //  ball bot loaded and time active
+
+        SmartDashboard.putNumber("intake timer inside", timer.get());
+        if (ballloaded == false) { //  ball bot loaded and time active
           intakesubsystem.SetIntakeOn();
           intakesubsystem.SetElevatorOn();
         } else { // Ball loaded stop and reset

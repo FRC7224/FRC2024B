@@ -25,26 +25,46 @@ public final class DrivetrainConstants {
   //  public static int FRONT_RIGHT_MODULE_STEER_MOTOR = 1;
   //  public static int FRONT_RIGHT_MODULE_STEER_ENCODER = 2;
   //  public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = 292;
+  /*
+    public static int FRONT_LEFT_MODULE_DRIVE_MOTOR = 3;
+    public static int FRONT_LEFT_MODULE_STEER_MOTOR = 1;
+    public static int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = 206;
 
-  public static int FRONT_LEFT_MODULE_DRIVE_MOTOR = 3;
-  public static int FRONT_LEFT_MODULE_STEER_MOTOR = 1;
-  public static int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
-  public static final double FRONT_LEFT_MODULE_STEER_OFFSET = 206;
+    public static int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 12;
+    public static int FRONT_RIGHT_MODULE_STEER_MOTOR = 10;
+    public static int FRONT_RIGHT_MODULE_STEER_ENCODER = 11;
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = 311;
 
-  public static int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 12;
-  public static int FRONT_RIGHT_MODULE_STEER_MOTOR = 10;
-  public static int FRONT_RIGHT_MODULE_STEER_ENCODER = 11;
-  public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = 311;
+    public static int BACK_LEFT_MODULE_DRIVE_MOTOR = 9;
+    public static int BACK_LEFT_MODULE_STEER_MOTOR = 7;
+    public static int BACK_LEFT_MODULE_STEER_ENCODER = 8;
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = 71.24;
 
-  public static int BACK_LEFT_MODULE_DRIVE_MOTOR = 9;
-  public static int BACK_LEFT_MODULE_STEER_MOTOR = 7;
-  public static int BACK_LEFT_MODULE_STEER_ENCODER = 8;
-  public static final double BACK_LEFT_MODULE_STEER_OFFSET = 71.24;
+    public static int BACK_RIGHT_MODULE_DRIVE_MOTOR = 6;
+    public static int BACK_RIGHT_MODULE_STEER_MOTOR = 4;
+    public static int BACK_RIGHT_MODULE_STEER_ENCODER = 5;
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = 55.96;
+  */
+  public static int FRONT_LEFT_MODULE_DRIVE_MOTOR = 6;
+  public static int FRONT_LEFT_MODULE_STEER_MOTOR = 4;
+  public static int FRONT_LEFT_MODULE_STEER_ENCODER = 5;
+  public static double FRONT_LEFT_MODULE_STEER_OFFSET = 55.96;
 
-  public static int BACK_RIGHT_MODULE_DRIVE_MOTOR = 6;
-  public static int BACK_RIGHT_MODULE_STEER_MOTOR = 4;
-  public static int BACK_RIGHT_MODULE_STEER_ENCODER = 5;
-  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = 55.96;
+  public static int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 9;
+  public static int FRONT_RIGHT_MODULE_STEER_MOTOR = 7;
+  public static int FRONT_RIGHT_MODULE_STEER_ENCODER = 8;
+  public static double FRONT_RIGHT_MODULE_STEER_OFFSET = 71.24;
+
+  public static int BACK_LEFT_MODULE_DRIVE_MOTOR = 12;
+  public static int BACK_LEFT_MODULE_STEER_MOTOR = 10;
+  public static int BACK_LEFT_MODULE_STEER_ENCODER = 11;
+  public static double BACK_LEFT_MODULE_STEER_OFFSET = 311;
+
+  public static int BACK_RIGHT_MODULE_DRIVE_MOTOR = 3;
+  public static int BACK_RIGHT_MODULE_STEER_MOTOR = 1;
+  public static int BACK_RIGHT_MODULE_STEER_ENCODER = 2;
+  public static double BACK_RIGHT_MODULE_STEER_OFFSET = 206;
 
   // FIXME: update robot dimensions
 

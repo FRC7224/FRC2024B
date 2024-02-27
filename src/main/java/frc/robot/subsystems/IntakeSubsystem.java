@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -36,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Set the elevator speed */
   public void SetElevatorOn() {
     elevatorleft.set(Constants.ELEVATOR_SPEED);
-    elevatorright.set(Constants.ELEVATOR_SPEED);
+    elevatorright.set(-Constants.ELEVATOR_SPEED);
   }
 
   /** Set elevator off */
@@ -51,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * @return
    */
   public boolean GetNoteLoadStatus() {
+    SmartDashboard.putBoolean("Note loaded", ballLoaded.get());
     return (ballLoaded.get());
   }
 

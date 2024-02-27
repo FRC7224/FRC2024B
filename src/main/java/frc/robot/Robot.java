@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -91,15 +90,15 @@ public class Robot extends LoggedRobot {
 
     switch (Constants.getMode()) {
       case REAL:
-        Logger.addDataReceiver(new WPILOGWriter("/media/sda1"));
+        // Logger.addDataReceiver(new WPILOGWriter("/media/sda1"));
 
         // Provide log data over the network, viewable in Advantage Scope.
         Logger.addDataReceiver(new NT4Publisher());
 
         LoggedPowerDistribution.getInstance();
 
-        SignalLogger.setPath("/media/sda1");
-        SignalLogger.start();
+        // SignalLogger.setPath("/media/sda1");
+        // SignalLogger.start();
         break;
 
       case SIM:

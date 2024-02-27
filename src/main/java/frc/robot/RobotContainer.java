@@ -10,8 +10,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 // import com.pathplanner.lib.PathConstraints;
 // import com.pathplanner.lib.PathPlanner;
 // import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -228,6 +226,7 @@ public class RobotContainer {
     // new TeleopSwerve(drivetrain,
     // -drivejoystick.getRawAxis(1),-drivejoystick.getRawAxis(0),
     // -drivejoystick.getRawAxis(3));
+
     drivetrain.setDefaultCommand(
         new TeleopSwerve(
             drivetrain,
@@ -274,7 +273,7 @@ public class RobotContainer {
     ShootButton.onTrue(
         Commands.sequence(
             Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
-            Commands.waitSeconds(1.0), // wait for spin up
+            Commands.waitSeconds(1.5), // wait for spin up
             Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
@@ -283,7 +282,7 @@ public class RobotContainer {
     ShootButtonLow.onTrue(
         Commands.sequence(
             Commands.runOnce(shootsubsystem::setShootSpeedLow, shootsubsystem),
-            Commands.waitSeconds(0.5), // wait for spin up
+            Commands.waitSeconds(1.5), // wait for spin up
             Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
@@ -329,16 +328,16 @@ public class RobotContainer {
      * demonstration of PathPlanner auto with event markers
      *
      */
-    Command autoTest = new PathPlannerAuto("TestAuto");
-    autoChooser.addOption("Test Auto", autoTest);
+    // Command autoTest = new PathPlannerAuto("TestAuto");
+    //  autoChooser.addOption("Test Auto", autoTest);
 
     /************ Choreo Test Path ************
      *
      * demonstration of PathPlanner hosted Choreo path
      *
      */
-    Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
-    autoChooser.addOption("Choreo Auto", choreoAutoTest);
+    //  Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
+    //  autoChooser.addOption("Choreo Auto", choreoAutoTest);
 
     /************ Start Point ************
      *
@@ -346,13 +345,14 @@ public class RobotContainer {
      *
      */
 
-    Command startPoint =
-        Commands.runOnce(
-            () ->
-                drivetrain.resetPose(
-                    PathPlannerPath.fromPathFile("StartPoint").getPreviewStartingHolonomicPose()),
-            drivetrain);
-    autoChooser.addOption("Start Point", startPoint);
+    //   Command startPoint =
+    //       Commands.runOnce(
+    //           () ->
+    //               drivetrain.resetPose(
+    //
+    // PathPlannerPath.fromPathFile("StartPoint").getPreviewStartingHolonomicPose()),
+    //           drivetrain);
+    //   autoChooser.addOption("Start Point", startPoint);
 
     /************ Drive Characterization ************
      *
@@ -365,16 +365,16 @@ public class RobotContainer {
      * used for empirically determining the wheel diameter
      *
      */
-    Command distanceTestPathCommand = new PathPlannerAuto("DistanceTest");
-    autoChooser.addOption("Distance Path", distanceTestPathCommand);
+    //  Command distanceTestPathCommand = new PathPlannerAuto("DistanceTest");
+    //   autoChooser.addOption("Distance Path", distanceTestPathCommand);
 
     /************ Auto Tuning ************
      *
      * useful for tuning the autonomous PID controllers
      *
      */
-    Command tuningCommand = new PathPlannerAuto("Tuning");
-    autoChooser.addOption("Auto Tuning", tuningCommand);
+    //    Command tuningCommand = new PathPlannerAuto("Tuning");
+    //    autoChooser.addOption("Auto Tuning", tuningCommand);
 
     Shuffleboard.getTab("MAIN").add(autoChooser.getSendableChooser());
   }
