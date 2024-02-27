@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -101,6 +102,8 @@ public class Drivetrain extends SubsystemBase {
   private DriveMode driveMode = DriveMode.NORMAL;
   private double characterizationVoltage = 0.0;
 
+  private DriverStation.Alliance alliance = DriverStation.Alliance.Blue;
+
   /** Constructs a new DrivetrainSubsystem object. */
   public Drivetrain(
       GyroIO gyroIO,
@@ -124,6 +127,7 @@ public class Drivetrain extends SubsystemBase {
 
     this.gyroOffset = 0;
 
+  
     this.chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
     this.poseEstimator = RobotOdometry.getInstance().getPoseEstimator();
@@ -652,5 +656,27 @@ public class Drivetrain extends SubsystemBase {
     NORMAL,
     X,
     CHARACTERIZATION
+  }
+
+      /**
+   * This method should be invoked once the alliance color is known. Refer to the RobotContainer's
+   * checkAllianceColor method for best practices on when to check the alliance's color. The
+   * alliance color is needed when running auto paths as those paths are always defined for
+   * blue-alliance robots and need to be flipped for red-alliance robots.
+   *
+   * @param newAlliance the new alliance color
+   */
+  public void updateAlliance(DriverStation.Alliance newAlliance) {
+    this.alliance = newAlliance;
+  }
+
+  /**
+   * Returns true if the auto path, which is always defined for a blue alliance robot, should be
+   * flipped to the red alliance side of the field.
+   *
+   * @return true if the auto path should be flipped to the red alliance side of the field
+   */
+  public boolean shouldFlipAutoPath() {
+    return this.alliance == Alliance.Red;
   }
 }
