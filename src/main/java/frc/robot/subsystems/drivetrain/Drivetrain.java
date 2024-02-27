@@ -5,7 +5,10 @@
 package frc.robot.subsystems.drivetrain;
 
 import static frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,6 +65,7 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveModule[] swerveModules = new SwerveModule[4]; // FL, FR, BL, BR
 
+
   // some of this code is from the SDS example code
 
   private Translation2d centerGravity;
@@ -85,8 +89,7 @@ public class Drivetrain extends SubsystemBase {
   private boolean isFieldRelative;
 
   private double gyroOffset;
-
-  private ChassisSpeeds chassisSpeeds;
+   private ChassisSpeeds chassisSpeeds;
 
   private static final String SUBSYSTEM_NAME = "Drivetrain";
   private static final boolean TESTING = false;
@@ -129,6 +132,59 @@ public class Drivetrain extends SubsystemBase {
     tabMain.addNumber("Gyroscope Angle", () -> getRotation().getDegrees());
     tabMain.addBoolean("X-Stance On?", this::isXstance);
     tabMain.addBoolean("Field-Relative Enabled?", () -> this.isFieldRelative);
+
+
+    
+
+    AutoBuilder.configureHolonomic(
+    this::getPose, // Robot pose supplier
+    this::resetPose, // Method to reset odometry (will be called if your auto has a starting
+    // pose)
+   this::ChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+   this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE
+    // ChassisSpeeds
+    new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
+        // your Constants class
+        new PIDConstants(
+            DrivetrainConstants.AUTO_DRIVE_P_CONTROLLER,
+            DrivetrainConstants.AUTO_DRIVE_I_CONTROLLER,
+            DrivetrainConstants.AUTO_DRIVE_D_CONTROLLER), // Translation PID constants
+        new PIDConstants(
+            DrivetrainConstants.AUTO_TURN_P_CONTROLLER,
+            DrivetrainConstants.AUTO_TURN_I_CONTROLLER,
+            DrivetrainConstants.AUTO_TURN_D_CONTROLLER), // Rotation PID constants
+        DrivetrainConstants.AUTO_MAX_SPEED_METERS_PER_SECOND, // Max module speed, in m/s
+        new Translation2d(
+                DrivetrainConstants.WHEELBASE_METERS,
+                DrivetrainConstants.TRACKWIDTH_METERS)
+            .getNorm(), // Drive base radius in meters. Distance from robot center to furthest
+        // module.
+        new ReplanningConfig() // Default path replanning config. See the API for the options
+        // here
+        ),
+    this::shouldFlipAutoPath,
+    this // Reference to this subsystem to set requirements
+    );
+
+
+    
+    public ChassisSpeeds  {
+      return new ChassisSpeeds2(
+            chassisSpeeds.vyMetersPerSecond,
+            chassisSpeeds.vxMetersPerSecond, 
+            chassisSpeeds.omegaRadiansPerSecond);
+    };
+  
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+      this.drive(
+          chassisSpeeds.vxMetersPerSecond,
+          chassisSpeeds.vyMetersPerSecond,
+          chassisSpeeds.omegaRadiansPerSecond,
+          false,
+          false);
+    }
+
+
 
     if (DEBUGGING) {
       ShuffleboardTab tab = Shuffleboard.getTab(SUBSYSTEM_NAME);

@@ -47,7 +47,7 @@ public final class Constants {
   public static final int kTimeoutMs = 30;
   public static boolean kSensorPhase = false;
   public static boolean kMotorInvert = false;
-  public static final Gains kGains = new Gains(0.5, 0.0, 0.1, 0.00, 0, 0.5);
+  // public static final Gains kGains = new Gains(0.5, 0.0, 0.1, 0.00, 0, 0.5);
   public static final double DEADBAND = 0.05;
 
   ////// Climb 1 Constants ///////////////////////////
@@ -75,7 +75,7 @@ public final class Constants {
   public static double kR0 = 250;
   public static double kR1 = 1500;
 
-  public static double kshootRightP = 0.1; // 6e-5
+  public static double kshootRightP = 0.01; // 6e-5
   public static double kshootRightI = 0;
   public static double kshootRightD = 0;
   public static double kshootRightIz = 0;
@@ -84,7 +84,7 @@ public final class Constants {
   public static double kshootRightkMinOutput = -0.2;
   public static double kshootRightmaxRPM = 1500;
 
-  public static double kshootLeftP = 0.1;
+  public static double kshootLeftP = 0.01;
   public static double kshootLeftI = 0;
   public static double kshootLeftD = 0;
   public static double kshootLeftIz = 0;

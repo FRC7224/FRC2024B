@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 // import com.pathplanner.lib.PathConstraints;
 // import com.pathplanner.lib.PathPlanner;
 // import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -328,8 +329,8 @@ public class RobotContainer {
      * demonstration of PathPlanner auto with event markers
      *
      */
-    // Command autoTest = new PathPlannerAuto("TestAuto");
-    //  autoChooser.addOption("Test Auto", autoTest);
+    Command autoTest = new PathPlannerAuto("TestAuto");
+    autoChooser.addOption("Test Auto", autoTest);
 
     /************ Choreo Test Path ************
      *
