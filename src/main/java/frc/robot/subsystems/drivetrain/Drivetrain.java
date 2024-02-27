@@ -169,11 +169,11 @@ public class Drivetrain extends SubsystemBase {
 
     
     public ChassisSpeeds  {
-      return new ChassisSpeeds2(
-            chassisSpeeds.vyMetersPerSecond,
-            chassisSpeeds.vxMetersPerSecond, 
-            chassisSpeeds.omegaRadiansPerSecond);
-    };
+      return new ChassisSpeeds(
+            this.drivetrain.chassisSpeeds.vxMetersPerSecond,
+            this.drivetrain.chassisSpeeds.vyMetersPerSecond, 
+            this.drivetrain.chassisSpeeds.omegaRadiansPerSecond);
+    }
   
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
       this.drive(
