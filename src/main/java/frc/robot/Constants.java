@@ -29,11 +29,11 @@ public final class Constants {
 
   ////// Intake Constants ///////////////////////////
   public static double INTAKE_TIMER = 3.0;
-  public static double INTAKE_SPEED = -0.3;
+  public static double INTAKE_SPEED = -0.6;
   public static int NOTE_SENSOR_CHANNEL = 4;
 
   ////// Elevator Constants ///////////////////////////
-  public static double ELEVATOR_SPEED = -0.2;
+  public static double ELEVATOR_SPEED = -0.3;
 
   ////// Climb Constants ///////////////////////////
   public static double CLIMB_MAX_HEIGHT = 660000;

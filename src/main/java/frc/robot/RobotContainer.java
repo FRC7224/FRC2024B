@@ -7,10 +7,8 @@ package frc.robot;
 import static frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
 
 import com.pathplanner.lib.auto.NamedCommands;
-// import com.pathplanner.lib.PathConstraints;
-// import com.pathplanner.lib.PathPlanner;
-// import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -84,7 +82,7 @@ public class RobotContainer {
             // the robot counter-clockwise should
             // cause the angle reading to increase until it wraps back over to zero.
             GyroIO gyro =
-                new GyroIOAhrs(); // NavX connected over MXP    SmartDashboard.putNumber("pitch io",
+                new GyroIOAhrs(); // NavX connected over MXP SmartDashboard.putNumber("pitch io",
             // gyro.getPitch());
 
             SwerveModule flModule =
@@ -135,7 +133,7 @@ public class RobotContainer {
             intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
             shootsubsystem = new ShootSubsystem();
-            //        new Vision(new VisionIOPhotonVision(CAMERA_NAME));
+            // new Vision(new VisionIOPhotonVision(CAMERA_NAME));
             break;
           }
         case ROBOT_SIMBOT:
@@ -157,12 +155,13 @@ public class RobotContainer {
             shootsubsystem = new ShootSubsystem();
 
             // try {
-            //   layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
-            //  } catch (IOException e) {
-            //   layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
+            // layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
+            // } catch (IOException e) {
+            // layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
             // }
             // new Vision(
-            //     new VisionIOSim(layout, drivetrain::getPose, VisionConstants.ROBOT_TO_CAMERA));
+            // new VisionIOSim(layout, drivetrain::getPose,
+            // VisionConstants.ROBOT_TO_CAMERA));
 
             break;
           }
@@ -186,7 +185,7 @@ public class RobotContainer {
       intakesubsystem = new IntakeSubsystem();
       climbcontrol = new ClimbSubsystem();
       shootsubsystem = new ShootSubsystem();
-      //  new Vision(new VisionIO() {});
+      // new Vision(new VisionIO() {});
     }
 
     // disable all telemetry in the LiveWindow to reduce the processing during each
@@ -239,9 +238,9 @@ public class RobotContainer {
         new IntakeCommand( // use same button for preset rotate and extend
             intakesubsystem, IntakeoverrideButton, IntakeButton));
 
-    //  shootsubsystem.setDefaultCommand(
-    //      new ShootCommand( // use same button for preset rotate and extend
-    //          shootsubsystem, ShootButton, () -> drivejoystick.getRawAxis(4)));
+    // shootsubsystem.setDefaultCommand(
+    // new ShootCommand( // use same button for preset rotate and extend
+    // shootsubsystem, ShootButton, () -> drivejoystick.getRawAxis(4)));
 
     climbcontrol.setDefaultCommand(
         new ClimbCommand(
@@ -263,7 +262,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // field-relative toggle
 
-    //   SmartDashboard.putBoolean("Field Button input", FieldRelativeButton.getAsBoolean());
+    // SmartDashboard.putBoolean("Field Button input",
+    // FieldRelativeButton.getAsBoolean());
     FieldRelativeButton.toggleOnTrue(
         Commands.either(
             Commands.runOnce(drivetrain::disableFieldRelative, drivetrain),
@@ -306,11 +306,11 @@ public class RobotContainer {
     AUTO_EVENT_MAP.put("event2", Commands.print("passed marker 2"));
 
     // build auto path commands
-    //   List<PathPlannerTrajectory> Right3long =
-    //       PathPlanner.loadPathGroup(
-    //           "Right3long",
-    //           new PathConstraints(
-    //               AUTO_MAX_SPEED_METERS_PER_SECOND,
+    // List<PathPlannerTrajectory> Right3long =
+    // PathPlanner.loadPathGroup(
+    // "Right3long",
+    // new PathConstraints(
+    // AUTO_MAX_SPEED_METERS_PER_SECOND,
     // AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
     // Waypoints
@@ -324,7 +324,8 @@ public class RobotContainer {
 
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
-    /************ Test Path ************
+    /************
+     * Test Path ************
      *
      * demonstration of PathPlanner auto with event markers
      *
@@ -332,50 +333,55 @@ public class RobotContainer {
     Command autoTest = new PathPlannerAuto("TestAuto");
     autoChooser.addOption("Test Auto", autoTest);
 
-    /************ Choreo Test Path ************
+    /************
+     * Choreo Test Path ************
      *
      * demonstration of PathPlanner hosted Choreo path
      *
      */
-    //  Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
-    //  autoChooser.addOption("Choreo Auto", choreoAutoTest);
+    Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
+    autoChooser.addOption("Choreo Auto", choreoAutoTest);
 
-    /************ Start Point ************
+    /************
+     * Start Point ************
      *
      * useful for initializing the pose of the robot to a known location
      *
      */
 
-    //   Command startPoint =
-    //       Commands.runOnce(
-    //           () ->
-    //               drivetrain.resetPose(
-    //
-    // PathPlannerPath.fromPathFile("StartPoint").getPreviewStartingHolonomicPose()),
-    //           drivetrain);
-    //   autoChooser.addOption("Start Point", startPoint);
+    Command startPoint =
+        Commands.runOnce(
+            () ->
+                drivetrain.resetPose(
+                    PathPlannerPath.fromPathFile("StartPoint").getPreviewStartingHolonomicPose()),
+            drivetrain);
+    autoChooser.addOption("Start Point", startPoint);
 
-    /************ Drive Characterization ************
+    /************
+     * Drive Characterization ************
      *
-     * useful for characterizing the swerve modules for driving (i.e, determining kS and kV)
+     * useful for characterizing the swerve modules for driving (i.e, determining kS
+     * and kV)
      *
      */
 
-    /************ Distance Test ************
+    /************
+     * Distance Test ************
      *
      * used for empirically determining the wheel diameter
      *
      */
-    //  Command distanceTestPathCommand = new PathPlannerAuto("DistanceTest");
-    //   autoChooser.addOption("Distance Path", distanceTestPathCommand);
+    Command distanceTestPathCommand = new PathPlannerAuto("DistanceTest");
+    autoChooser.addOption("Distance Path", distanceTestPathCommand);
 
-    /************ Auto Tuning ************
+    /************
+     * Auto Tuning ************
      *
      * useful for tuning the autonomous PID controllers
      *
      */
-    //    Command tuningCommand = new PathPlannerAuto("Tuning");
-    //    autoChooser.addOption("Auto Tuning", tuningCommand);
+    Command tuningCommand = new PathPlannerAuto("Tuning");
+    autoChooser.addOption("Auto Tuning", tuningCommand);
 
     Shuffleboard.getTab("MAIN").add(autoChooser.getSendableChooser());
   }

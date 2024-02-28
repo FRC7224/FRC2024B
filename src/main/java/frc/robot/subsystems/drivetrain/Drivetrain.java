@@ -5,6 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import static frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -66,7 +67,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveModule[] swerveModules = new SwerveModule[4]; // FL, FR, BL, BR
 
-
   // some of this code is from the SDS example code
 
   private Translation2d centerGravity;
@@ -90,7 +90,7 @@ public class Drivetrain extends SubsystemBase {
   private boolean isFieldRelative;
 
   private double gyroOffset;
-   private ChassisSpeeds chassisSpeeds;
+  private ChassisSpeeds chassisSpeeds;
 
   private static final String SUBSYSTEM_NAME = "Drivetrain";
   private static final boolean TESTING = false;
@@ -127,7 +127,6 @@ public class Drivetrain extends SubsystemBase {
 
     this.gyroOffset = 0;
 
-  
     this.chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
     this.poseEstimator = RobotOdometry.getInstance().getPoseEstimator();
@@ -137,58 +136,34 @@ public class Drivetrain extends SubsystemBase {
     tabMain.addBoolean("X-Stance On?", this::isXstance);
     tabMain.addBoolean("Field-Relative Enabled?", () -> this.isFieldRelative);
 
-
-    
-
     AutoBuilder.configureHolonomic(
-    this::getPose, // Robot pose supplier
-    this::resetPose, // Method to reset odometry (will be called if your auto has a starting
-    // pose)
-   this::ChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-   this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE
-    // ChassisSpeeds
-    new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
-        // your Constants class
-        new PIDConstants(
-            DrivetrainConstants.AUTO_DRIVE_P_CONTROLLER,
-            DrivetrainConstants.AUTO_DRIVE_I_CONTROLLER,
-            DrivetrainConstants.AUTO_DRIVE_D_CONTROLLER), // Translation PID constants
-        new PIDConstants(
-            DrivetrainConstants.AUTO_TURN_P_CONTROLLER,
-            DrivetrainConstants.AUTO_TURN_I_CONTROLLER,
-            DrivetrainConstants.AUTO_TURN_D_CONTROLLER), // Rotation PID constants
-        DrivetrainConstants.AUTO_MAX_SPEED_METERS_PER_SECOND, // Max module speed, in m/s
-        new Translation2d(
-                DrivetrainConstants.WHEELBASE_METERS,
-                DrivetrainConstants.TRACKWIDTH_METERS)
-            .getNorm(), // Drive base radius in meters. Distance from robot center to furthest
-        // module.
-        new ReplanningConfig() // Default path replanning config. See the API for the options
-        // here
-        ),
-    this::shouldFlipAutoPath,
-    this // Reference to this subsystem to set requirements
-    );
-
-
-    
-    public ChassisSpeeds  {
-      return new ChassisSpeeds(
-            this.drivetrain.chassisSpeeds.vxMetersPerSecond,
-            this.drivetrain.chassisSpeeds.vyMetersPerSecond, 
-            this.drivetrain.chassisSpeeds.omegaRadiansPerSecond);
-    }
-  
-    public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
-      this.drive(
-          chassisSpeeds.vxMetersPerSecond,
-          chassisSpeeds.vyMetersPerSecond,
-          chassisSpeeds.omegaRadiansPerSecond,
-          false,
-          false);
-    }
-
-
+        this::getPose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting
+        // pose)
+        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE
+        // ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
+            // your Constants class
+            new PIDConstants(
+                DrivetrainConstants.AUTO_DRIVE_P_CONTROLLER,
+                DrivetrainConstants.AUTO_DRIVE_I_CONTROLLER,
+                DrivetrainConstants.AUTO_DRIVE_D_CONTROLLER), // Translation PID constants
+            new PIDConstants(
+                DrivetrainConstants.AUTO_TURN_P_CONTROLLER,
+                DrivetrainConstants.AUTO_TURN_I_CONTROLLER,
+                DrivetrainConstants.AUTO_TURN_D_CONTROLLER), // Rotation PID constants
+            DrivetrainConstants.AUTO_MAX_SPEED_METERS_PER_SECOND, // Max module speed, in m/s
+            new Translation2d(
+                    DrivetrainConstants.WHEELBASE_METERS, DrivetrainConstants.TRACKWIDTH_METERS)
+                .getNorm(), // Drive base radius in meters. Distance from robot center to furthest
+            // module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options
+            // here
+            ),
+        this::shouldFlipAutoPath,
+        this // Reference to this subsystem to set requirements
+        );
 
     if (DEBUGGING) {
       ShuffleboardTab tab = Shuffleboard.getTab(SUBSYSTEM_NAME);
@@ -207,6 +182,25 @@ public class Drivetrain extends SubsystemBase {
       ShuffleboardTab tab = Shuffleboard.getTab(SUBSYSTEM_NAME);
       tab.add("Enable XStance", new InstantCommand(this::enableXstance));
       tab.add("Disable XStance", new InstantCommand(this::disableXstance));
+    }
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return KINEMATICS.toChassisSpeeds(
+        swerveModules[0].getState(),
+        swerveModules[1].getState(),
+        swerveModules[2].getState(),
+        swerveModules[3].getState());
+  }
+
+  public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+    SwerveModuleState[] swerveModuleStates =
+        KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerGravity);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_VELOCITY_METERS_PER_SECOND);
+
+    for (SwerveModule swerveModule : swerveModules) {
+      swerveModule.setDesiredState(
+          swerveModuleStates[swerveModule.getModuleNumber()], false, false);
     }
   }
 
@@ -658,7 +652,7 @@ public class Drivetrain extends SubsystemBase {
     CHARACTERIZATION
   }
 
-      /**
+  /**
    * This method should be invoked once the alliance color is known. Refer to the RobotContainer's
    * checkAllianceColor method for best practices on when to check the alliance's color. The
    * alliance color is needed when running auto paths as those paths are always defined for
