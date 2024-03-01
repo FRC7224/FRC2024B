@@ -22,6 +22,9 @@ public class ShootSubsystem extends SubsystemBase {
   private SparkPIDController m_pidControllerLeft;
   private RelativeEncoder m_encoderRight;
   private RelativeEncoder m_encoderLeft;
+
+  private static final boolean DEBUGGING = false;
+
   /** */
   public ShootSubsystem() {
     /*
@@ -52,15 +55,16 @@ public class ShootSubsystem extends SubsystemBase {
     m_pidControllerRight.setOutputRange(
         Constants.kshootRightkMinOutput, Constants.kshootRightkMinOutput);
 
-    // display PID coefficients on SmartDashboard
-    SmartDashboard.putNumber("R P Gain", Constants.kshootRightP);
-    SmartDashboard.putNumber("R I Gain", Constants.kshootRightI);
-    SmartDashboard.putNumber("R D Gain", Constants.kshootRightD);
-    SmartDashboard.putNumber("R I Zone", Constants.kshootRightIz);
-    SmartDashboard.putNumber("R Feed Forward", Constants.kshootRightF);
-    SmartDashboard.putNumber("R Max Output", Constants.kshootRightkMinOutput);
-    SmartDashboard.putNumber("R Min Output", Constants.kshootRightkMinOutput);
-
+    if (DEBUGGING) {
+      // display PID coefficients on SmartDashboard
+      SmartDashboard.putNumber("R P Gain", Constants.kshootRightP);
+      SmartDashboard.putNumber("R I Gain", Constants.kshootRightI);
+      SmartDashboard.putNumber("R D Gain", Constants.kshootRightD);
+      SmartDashboard.putNumber("R I Zone", Constants.kshootRightIz);
+      SmartDashboard.putNumber("R Feed Forward", Constants.kshootRightF);
+      SmartDashboard.putNumber("R Max Output", Constants.kshootRightkMinOutput);
+      SmartDashboard.putNumber("R Min Output", Constants.kshootRightkMinOutput);
+    }
     /*
      * sets up LEFT shooter with PID
      */
@@ -90,39 +94,51 @@ public class ShootSubsystem extends SubsystemBase {
         Constants.kshootLeftkMinOutput, Constants.kshootLeftkMinOutput);
 
     // display PID coefficients on SmartDashboard
-    SmartDashboard.putNumber("R P Gain", Constants.kshootLeftP);
-    SmartDashboard.putNumber("R I Gain", Constants.kshootLeftI);
-    SmartDashboard.putNumber("R D Gain", Constants.kshootLeftD);
-    SmartDashboard.putNumber("R I Zone", Constants.kshootLeftIz);
-    SmartDashboard.putNumber("R Feed Forward", Constants.kshootLeftF);
-    SmartDashboard.putNumber("R Max Output", Constants.kshootLeftkMinOutput);
-    SmartDashboard.putNumber("R Min Output", Constants.kshootLeftkMinOutput);
+    if (DEBUGGING) {
+      SmartDashboard.putNumber("R P Gain", Constants.kshootLeftP);
+      SmartDashboard.putNumber("R I Gain", Constants.kshootLeftI);
+      SmartDashboard.putNumber("R D Gain", Constants.kshootLeftD);
+      SmartDashboard.putNumber("R I Zone", Constants.kshootLeftIz);
+      SmartDashboard.putNumber("R Feed Forward", Constants.kshootLeftF);
+      SmartDashboard.putNumber("R Max Output", Constants.kshootLeftkMinOutput);
+      SmartDashboard.putNumber("R Min Output", Constants.kshootLeftkMinOutput);
+    }
   }
 
   /** sets the shooter speed */
   public void setShootSpeedLow() {
-    shootMotorRight.set(-.4);
-    shootMotorLeft.set(.4);
-    SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
-
-    //  m_pidControllerRight.setReference(Constants.ZONE_LOW, CANSparkMax.ControlType.kVelocity);
-    SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
-    //  m_pidControllerLeft.setReference(Constants.ZONE_LOW, CANSparkMax.ControlType.kVelocity);
+    shootMotorRight.set(-Constants.ZONE_LOW_VC);
+    shootMotorLeft.set(Constants.ZONE_LOW_VC);
+    if (DEBUGGING) {
+      SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+      SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    }
+    // Closed loop control not used
+    // m_pidControllerRight.setReference(Constants.ZONE_LOW,
+    // CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerLeft.setReference(Constants.ZONE_LOW,
+    // CANSparkMax.ControlType.kVelocity);
   }
 
   public void setShootSpeedHigh() {
-
-    shootMotorRight.set(-.95);
-    shootMotorLeft.set(.95);
-    SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
-    //    m_pidControllerRight.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
-    SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
-    //    m_pidControllerLeft.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
+    shootMotorRight.set(-Constants.ZONE_LOW_VC);
+    shootMotorLeft.set(Constants.ZONE_LOW_VC);
+    if (DEBUGGING) {
+      SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+      SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    }
+    // Closed loop control not used
+    // m_pidControllerRight.setReference(Constants.ZONE_HIGH,
+    // CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerLeft.setReference(Constants.ZONE_HIGH,
+    // CANSparkMax.ControlType.kVelocity);
   }
 
   public void stopshooter() {
-    SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
-    SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    if (DEBUGGING) {
+      SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+      SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    }
     m_pidControllerLeft.setReference(0, CANSparkMax.ControlType.kVelocity);
     m_pidControllerRight.setReference(0, CANSparkMax.ControlType.kVelocity);
     shootMotorRight.stopMotor();

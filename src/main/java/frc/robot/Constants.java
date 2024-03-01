@@ -24,8 +24,9 @@ public final class Constants {
 
   //////  autobalace  Constants ///////////////////////////
 
-  public static double PITCH_LIMIT = 5.0;
   public static double PITCH_CAL_OFFSET = 0;
+  public static double ROLL_CAL_OFFSET = 0;
+  public static double ROLL_OFFSET = 0;
 
   ////// Intake Constants ///////////////////////////
   public static double INTAKE_TIMER = 3.0;
@@ -34,6 +35,7 @@ public final class Constants {
 
   ////// Elevator Constants ///////////////////////////
   public static double ELEVATOR_SPEED = -0.3;
+  public static double ELEVATOR_SPEED_SHOOT = -0.6;
 
   ////// Climb Constants ///////////////////////////
   public static double CLIMB_MAX_HEIGHT = 660000;
@@ -47,7 +49,6 @@ public final class Constants {
   public static final int kTimeoutMs = 30;
   public static boolean kSensorPhase = false;
   public static boolean kMotorInvert = false;
-  // public static final Gains kGains = new Gains(0.5, 0.0, 0.1, 0.00, 0, 0.5);
   public static final double DEADBAND = 0.05;
 
   ////// Climb 1 Constants ///////////////////////////
@@ -56,6 +57,7 @@ public final class Constants {
   public static final int kclimb1TimeoutMs = 30;
   public static boolean kclimb1SensorPhase = true;
   public static boolean kclimb1MotorInvert = false;
+  // public static final Gains kGains = new Gains(0.5, 0.0, 0.1, 0.00, 0, 0.5);
   public static final Gains kGainsR1 = new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0);
 
   ////// Climb 2 Constants ///////////////////////////
@@ -68,10 +70,10 @@ public final class Constants {
       new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0); // Move Ball to shooter
 
   // Shooter
-  public static int ZONE_LOW = 250;
-
-  public static int ZONE_HIGH = 1500;
-
+  public static int ZONE_LOW = 250; // not used
+  public static int ZONE_HIGH = 1500; // not used
+  public static double ZONE_LOW_VC = 0.4;
+  public static double ZONE_HIGH_VC = 1.0;
   public static double kR0 = 250;
   public static double kR1 = 1500;
 
@@ -105,7 +107,7 @@ public final class Constants {
 
   public static final double LOOP_PERIOD_SECS = 0.02;
 
-  public static final boolean TUNING_MODE = true;
+  public static final boolean TUNING_MODE = false;
 
   // An empty string uses the default CAN bus; specify the name of the CANivore as
   // appropriate

@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
+import frc.robot.GlobalStatus;
 import frc.robot.subsystems.ClimbSubsystem;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -54,7 +56,7 @@ public class ClimbCommand extends Command {
 
   public void execute() {
     /* Gamepad processing */
-
+    SmartDashboard.putNumber("pitch", GlobalStatus.GlobalYaw);
     double climbcontrol = modifyAxis(translationRSupplier.getAsDouble());
 
     double motorOutput;
@@ -80,7 +82,8 @@ public class ClimbCommand extends Command {
       climbsubsystem.SetPercentOutputR1(climbcontrol * Constants.OV_CLIMB);
       climbsubsystem.SetPercentOutputR2(climbcontrol * Constants.OV_CLIMB);
     } else if (autolevelButton.getAsBoolean()) {
-      /// *** NEED TO FINISH *** */
+      // If Pitch is negitve hanging on lefside rasie left motor
+      // If Pitch is positive hanginf on right side
 
       climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
       climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);

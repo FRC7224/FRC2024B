@@ -81,9 +81,7 @@ public class RobotContainer {
             // The important thing about how you configure your gyroscope is that rotating
             // the robot counter-clockwise should
             // cause the angle reading to increase until it wraps back over to zero.
-            GyroIO gyro =
-                new GyroIOAhrs(); // NavX connected over MXP SmartDashboard.putNumber("pitch io",
-            // gyro.getPitch());
+            GyroIO gyro = new GyroIOAhrs(); // NavX connected over MXP SmartDashboard.putNumber
 
             SwerveModule flModule =
                 new SwerveModule(

@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.GlobalStatus;
 
 @SuppressWarnings("removal")
 
@@ -140,7 +139,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void SetTargetPositionClimb1(double targetPositionRotations) {
     climb1.set(ControlMode.Position, targetPositionRotations);
-    GlobalStatus.Global_Climb1_position = targetPositionRotations;
+    // GlobalStatus.Global_Climb1_position = targetPositionRotations;
   }
   ;
 
@@ -172,7 +171,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void SetTargetPositionClimb2(double targetPositionRotations) {
     climb2.set(ControlMode.Position, targetPositionRotations);
-    GlobalStatus.Global_Climb2_position = targetPositionRotations;
+    // GlobalStatus.Global_Climb2_position = targetPositionRotations;
     SmartDashboard.putNumber("target climb", targetPositionRotations);
   }
   ;

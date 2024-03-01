@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.team3061.gyro.GyroIO;
@@ -280,7 +279,18 @@ public class Drivetrain extends SubsystemBase {
    */
   //  public void resetOdometry(PathPlannerState state) {
   public void resetPose(Pose2d pose) {
-    this.resetPose(pose);
+    // this.resetPose(pose);
+    setGyroOffset(pose.getRotation().getDegrees());
+
+    for (int i = 0; i < 4; i++) {
+      swerveModulePositions[i] = swerveModules[i].getPosition();
+    }
+
+    estimatedPoseWithoutGyro = new Pose2d(pose.getTranslation(), pose.getRotation());
+    poseEstimator.resetPosition(
+        this.getRotation(),
+        swerveModulePositions,
+        new Pose2d(pose.getTranslation(), pose.getRotation()));
   } //   setGyroOffset(state.holonomicRotation.getDegrees());
 
   //    for (int i = 0; i < 4; i++) {
@@ -305,7 +315,7 @@ public class Drivetrain extends SubsystemBase {
    * direction.
    *
    * <p>If the drive mode is XSTANCE, the robot will ignore the specified velocities and turn the
-   * swerve modules into the x-stance orientation.
+   * swerve modules into the x-stance orientation. if (DEBUGGING) {
    *
    * <p>If the drive mode is CHARACTERIZATION, the robot will ignore the specified velocities and
    * run the characterization routine.
@@ -379,7 +389,6 @@ public class Drivetrain extends SubsystemBase {
     // update and log gyro inputs
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
-    SmartDashboard.putNumber("pitch", gyroInputs.pitch);
 
     // update and log the swerve moudles inputs
     for (SwerveModule swerveModule : swerveModules) {

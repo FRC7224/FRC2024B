@@ -15,6 +15,5 @@ public class GlobalStatus {
 
   ////// Global Status variable  ///////////////////////////
 
-  public static double Global_Climb1_position = 0;
-  public static double Global_Climb2_position = 0;
+  public static double GlobalYaw = 0;
 }
