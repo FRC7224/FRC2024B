@@ -34,8 +34,8 @@ public final class Constants {
   public static int NOTE_SENSOR_CHANNEL = 4;
 
   ////// Elevator Constants ///////////////////////////
-  public static double ELEVATOR_SPEED = -0.3;
-  public static double ELEVATOR_SPEED_SHOOT = -0.6;
+  public static double ELEVATOR_SPEED = -0.20;
+  public static double ELEVATOR_SPEED_SHOOT = -1.0;
 
   ////// Climb Constants ///////////////////////////
   public static double CLIMB_MAX_HEIGHT = 660000;
@@ -69,6 +69,9 @@ public final class Constants {
   public static final Gains kGainsR2 =
       new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0); // Move Ball to shooter
 
+  // Shelf
+  public static int PneumaticsShelf = 0;
+
   // Shooter
 
   public static int PN_SHELF = 0;
@@ -99,6 +102,7 @@ public final class Constants {
 
   ///////////////// CAN Constants //////////////////////////////
 
+  public static int PH_CAN = 1;
   public static int CLIMB_PORT_R = 14;
   public static int CLIMB_PORT_L = 15;
   public static int ELEVATOR_R = 16;

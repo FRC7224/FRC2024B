@@ -48,7 +48,7 @@ public class IntakeCommand extends Command {
     /* Get Talon/Victor's current output percentage */
     /** */
     boolean ballloaded;
-    ballloaded = !intakesubsystem.GetNoteLoadStatus();
+    ballloaded = intakesubsystem.GetNoteLoadStatus();
 
     if (intakeButton.getAsBoolean()) {
       timer.start();

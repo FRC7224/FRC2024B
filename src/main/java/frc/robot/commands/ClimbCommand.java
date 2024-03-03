@@ -93,6 +93,10 @@ public class ClimbCommand extends Command {
         targetPositionRotations = Constants.CLIMB_MAX_HEIGHT;
       } else if (targetPositionRotations <= Constants.CLIMB_MIN_HEIGHT) {
         targetPositionRotations = Constants.CLIMB_MIN_HEIGHT;
+        climbsubsystem.stop();
+        climbsubsystem.SetPercentOutputR2(0);
+        climbsubsystem.SetBrakemodeR2();
+        climbsubsystem.SetBrakemodeR1();
       }
       climbsubsystem.SetTargetPositionClimb1(targetPositionRotations);
       climbsubsystem.SetTargetPositionClimb2(targetPositionRotations);

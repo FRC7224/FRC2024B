@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,6 +57,7 @@ public class ClimbSubsystem extends SubsystemBase {
     climb1.configNominalOutputReverse(0, Constants.kclimb1TimeoutMs);
     climb1.configPeakOutputForward(1, Constants.kclimb1TimeoutMs);
     climb1.configPeakOutputReverse(-1, Constants.kclimb1TimeoutMs);
+
     /**
      * Config the allowable closed-loop error, Closed-Loop output will be neutral within this range.
      * See Table in Section 17.2.1 for native units per rotation.
@@ -148,6 +150,11 @@ public class ClimbSubsystem extends SubsystemBase {
   }
   ;
 
+  public void SetBrakemodeR1() {
+    climb1.setNeutralMode(NeutralMode.Brake);
+  }
+  ;
+
   /// Motor 2 Methods ////
   public static double GetMotorOutputPercentR2() {
     return (climb2.getMotorOutputPercent());
@@ -178,6 +185,11 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void SetPercentOutputR2(double percentoutput) {
     climb2.set(ControlMode.PercentOutput, percentoutput);
+  }
+  ;
+
+  public void SetBrakemodeR2() {
+    climb2.setNeutralMode(NeutralMode.Brake);
   }
   ;
 

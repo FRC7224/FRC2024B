@@ -121,8 +121,8 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   public void setShootSpeedHigh() {
-    shootMotorRight.set(-Constants.ZONE_LOW_VC);
-    shootMotorLeft.set(Constants.ZONE_LOW_VC);
+    shootMotorRight.set(-Constants.ZONE_HIGH_VC);
+    shootMotorLeft.set(Constants.ZONE_HIGH_VC);
     if (DEBUGGING) {
       SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
       SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());

@@ -31,6 +31,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -63,6 +64,7 @@ public class RobotContainer {
   private IntakeSubsystem intakesubsystem;
   private ClimbSubsystem climbcontrol;
   private ShootSubsystem shootsubsystem;
+  private PneumaticsSubsystem pneumaticsSubsystem;
 
   // use AdvantageKit's LoggedDashboardChooser instead of SendableChooser to
   // ensure accurate logging
@@ -154,6 +156,7 @@ public class RobotContainer {
             intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
             shootsubsystem = new ShootSubsystem();
+            pneumaticsSubsystem = new PneumaticsSubsystem();
 
             // try {
             // layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
@@ -186,6 +189,7 @@ public class RobotContainer {
       intakesubsystem = new IntakeSubsystem();
       climbcontrol = new ClimbSubsystem();
       shootsubsystem = new ShootSubsystem();
+      pneumaticsSubsystem = new PneumaticsSubsystem();
       // new Vision(new VisionIO() {});
     }
 
@@ -231,9 +235,11 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
         new TeleopSwerve(
             drivetrain,
-            () -> -drivejoystick.getRawAxis(1),
-            () -> -drivejoystick.getRawAxis(0),
-            () -> -drivejoystick.getRawAxis(3))); // field vs robot drive
+            () -> drivejoystick.getRawAxis(1),
+            () -> drivejoystick.getRawAxis(0),
+            () -> drivejoystick.getRawAxis(3))); // field vs robot drive
+
+    // pneumaticsSubsystem.setDefaultCommand(new PneumaticsControl(pneumaticsSubsystem));
 
     intakesubsystem.setDefaultCommand(
         new IntakeCommand( // use same button for preset rotate and extend
@@ -274,20 +280,23 @@ public class RobotContainer {
     // Shoot High
     ShootButton.onTrue(
         Commands.sequence(
+            Commands.runOnce(pneumaticsSubsystem::extendshelf, pneumaticsSubsystem),
             Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
             Commands.waitSeconds(1.5), // wait for spin up
-            Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
+            Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
     // Shoot High
     ShootButtonLow.onTrue(
         Commands.sequence(
+            Commands.runOnce(pneumaticsSubsystem::extendshelf, pneumaticsSubsystem),
             Commands.runOnce(shootsubsystem::setShootSpeedLow, shootsubsystem),
             Commands.waitSeconds(1.5), // wait for spin up
-            Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
+            Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
             Commands.waitSeconds(1.0), // wait for shot
-            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
+            Commands.runOnce(pneumaticsSubsystem::closeshelf, pneumaticsSubsystem)));
 
     // x-stance
     XStanceButton.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));
@@ -322,6 +331,8 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "disableXStance", Commands.runOnce(drivetrain::disableXstance, drivetrain));
     NamedCommands.registerCommand("wait5Seconds", Commands.waitSeconds(5.0));
+    NamedCommands.registerCommand(
+        "ShootHigh", Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
 
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
@@ -342,7 +353,14 @@ public class RobotContainer {
      */
     Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
     autoChooser.addOption("Choreo Auto", choreoAutoTest);
-
+    /************
+     * Blue Right  ************
+     *
+     * demonstration of PathPlanner auto with event markers
+     *
+     */
+    Command BLeftRRight = new PathPlannerAuto("BLeftRRight");
+    autoChooser.addOption("BLeft-RRight", BLeftRRight);
     /************
      * Start Point ************
      *
