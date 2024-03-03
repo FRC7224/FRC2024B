@@ -62,7 +62,7 @@ public final class DrivetrainConstants {
   public static double BACK_LEFT_MODULE_STEER_OFFSET = 311;
 
   public static int BACK_RIGHT_MODULE_DRIVE_MOTOR = 3;
-  public static int BACK_RIGHT_MODULE_STEER_MOTOR = 1;
+  public static int BACK_RIGHT_MODULE_STEER_MOTOR = 21;
   public static int BACK_RIGHT_MODULE_STEER_ENCODER = 2;
   public static double BACK_RIGHT_MODULE_STEER_OFFSET = 206;
 

@@ -70,6 +70,8 @@ public final class Constants {
       new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0); // Move Ball to shooter
 
   // Shooter
+
+  public static int PN_SHELF = 0;
   public static int ZONE_LOW = 250; // not used
   public static int ZONE_HIGH = 1500; // not used
   public static double ZONE_LOW_VC = 0.4;

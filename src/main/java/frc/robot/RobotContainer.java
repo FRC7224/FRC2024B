@@ -10,6 +10,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,6 +44,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // private OperatorInterface oi = new OperatorInterface() {};
 
+  final Solenoid shelfextend = new Solenoid(PneumaticsModuleType.REVPH, Constants.PN_SHELF);
   final Joystick drivejoystick = new Joystick(0);
   JoystickButton ShootButton = new JoystickButton(drivejoystick, 1),
       XStanceButton = new JoystickButton(drivejoystick, 2),
