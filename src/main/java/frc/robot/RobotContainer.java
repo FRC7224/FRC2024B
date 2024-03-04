@@ -31,7 +31,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -46,6 +45,7 @@ public class RobotContainer {
   // private OperatorInterface oi = new OperatorInterface() {};
 
   final Solenoid shelfextend = new Solenoid(PneumaticsModuleType.REVPH, Constants.PN_SHELF);
+
   final Joystick drivejoystick = new Joystick(0);
   JoystickButton ShootButton = new JoystickButton(drivejoystick, 1),
       XStanceButton = new JoystickButton(drivejoystick, 2),
@@ -64,7 +64,6 @@ public class RobotContainer {
   private IntakeSubsystem intakesubsystem;
   private ClimbSubsystem climbcontrol;
   private ShootSubsystem shootsubsystem;
-  private PneumaticsSubsystem pneumaticsSubsystem;
 
   // use AdvantageKit's LoggedDashboardChooser instead of SendableChooser to
   // ensure accurate logging
@@ -76,6 +75,7 @@ public class RobotContainer {
 
   /** Create the container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     // create real, simulated, or replay subsystems based on the mode and robot
     // specified
     if (Constants.getMode() != Mode.REPLAY) {
@@ -156,7 +156,6 @@ public class RobotContainer {
             intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
             shootsubsystem = new ShootSubsystem();
-            pneumaticsSubsystem = new PneumaticsSubsystem();
 
             // try {
             // layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
@@ -189,7 +188,7 @@ public class RobotContainer {
       intakesubsystem = new IntakeSubsystem();
       climbcontrol = new ClimbSubsystem();
       shootsubsystem = new ShootSubsystem();
-      pneumaticsSubsystem = new PneumaticsSubsystem();
+
       // new Vision(new VisionIO() {});
     }
 
@@ -280,7 +279,6 @@ public class RobotContainer {
     // Shoot High
     ShootButton.onTrue(
         Commands.sequence(
-            Commands.runOnce(pneumaticsSubsystem::extendshelf, pneumaticsSubsystem),
             Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
             Commands.waitSeconds(1.5), // wait for spin up
             Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
@@ -290,13 +288,13 @@ public class RobotContainer {
     // Shoot High
     ShootButtonLow.onTrue(
         Commands.sequence(
-            Commands.runOnce(pneumaticsSubsystem::extendshelf, pneumaticsSubsystem),
+            Commands.runOnce(() -> this.shelfextend.set(true)),
             Commands.runOnce(shootsubsystem::setShootSpeedLow, shootsubsystem),
             Commands.waitSeconds(1.5), // wait for spin up
             Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
-            Commands.runOnce(pneumaticsSubsystem::closeshelf, pneumaticsSubsystem)));
+            Commands.runOnce(() -> this.shelfextend.set(false))));
 
     // x-stance
     XStanceButton.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));
@@ -310,18 +308,40 @@ public class RobotContainer {
     ResetGyroButton.onTrue(Commands.runOnce(drivetrain::autoGyroscope, drivetrain));
   }
 
-  /** Use this method to define your commands for autonomous mode. */
+  // ** Use this method to define your commands for autonomous mode.
+
+  //  Command BLeftRRight1 = new PathPlannerAuto("BLeftRRight1");
+  // Command BLeftRRight2 = new PathPlannerAuto("BLeftRRight2");
+  // Command BLeftRRight3 = new PathPlannerAuto("BLeftRRight3");
+
+  Command autoBLeftRRight =
+      Commands.sequence(
+          ///     new PathPlannerAuto("BLeftRRight1"),
+          //     Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+          Commands.waitSeconds(0.5));
+  //     Commands.run(intakesubsystem::SetElevatorOnShoot, intakesubsystem));
+  /*       Commands.waitSeconds(0.5),
+          Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
+          Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
+          Commands.runOnce(intakesubsystem::SetIntakeOn, intakesubsystem))
+  //  new PathPlannerAuto("BLeftRRight1"),
+       Commands.waitSeconds(0.5),
+         Commands.runOnce(intakesubsystem::SetIntakeOff, intakesubsystem),
+         Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
+         //   new PathPlannerAuto("BLeftRRight1"),
+         Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+         Commands.waitSeconds(0.5),
+         Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+         Commands.waitSeconds(0.5),
+         Commands.runOnce(intakesubsystem::SetIntakeOff, intakesubsystem),
+         Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
+         Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
+
+  */
+
   private void configureAutoCommands() {
     AUTO_EVENT_MAP.put("event1", Commands.print("passed marker 1"));
     AUTO_EVENT_MAP.put("event2", Commands.print("passed marker 2"));
-
-    // build auto path commands
-    // List<PathPlannerTrajectory> Right3long =
-    // PathPlanner.loadPathGroup(
-    // "Right3long",
-    // new PathConstraints(
-    // AUTO_MAX_SPEED_METERS_PER_SECOND,
-    // AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
     // Waypoints
     NamedCommands.registerCommand("command1", Commands.print("passed marker 1"));
@@ -332,24 +352,30 @@ public class RobotContainer {
         "disableXStance", Commands.runOnce(drivetrain::disableXstance, drivetrain));
     NamedCommands.registerCommand("wait5Seconds", Commands.waitSeconds(5.0));
     NamedCommands.registerCommand(
-        "ShootHigh", Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
+        "shoothigh", Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem));
+    NamedCommands.registerCommand(
+        "shootstop", Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
+    NamedCommands.registerCommand(
+        "elon", Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem));
+    NamedCommands.registerCommand(
+        "eloff", Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem));
+    NamedCommands.registerCommand(
+        "intakeauto", Commands.runOnce(intakesubsystem::SetElevIntakeOnAuto, intakesubsystem));
+    NamedCommands.registerCommand(
+        "intakeoff", Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem));
 
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     /************
      * Test Path ************
-     *
      * demonstration of PathPlanner auto with event markers
-     *
      */
     Command autoTest = new PathPlannerAuto("TestAuto");
     autoChooser.addOption("Test Auto", autoTest);
 
     /************
      * Choreo Test Path ************
-     *
      * demonstration of PathPlanner hosted Choreo path
-     *
      */
     Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
     autoChooser.addOption("Choreo Auto", choreoAutoTest);
@@ -359,13 +385,11 @@ public class RobotContainer {
      * demonstration of PathPlanner auto with event markers
      *
      */
-    Command BLeftRRight = new PathPlannerAuto("BLeftRRight");
-    autoChooser.addOption("BLeft-RRight", BLeftRRight);
+    Command BLeftRRight1 = new PathPlannerAuto("BLeftRRight1");
+    autoChooser.addOption("BLeft RRight", BLeftRRight1);
     /************
      * Start Point ************
-     *
      * useful for initializing the pose of the robot to a known location
-     *
      */
 
     Command startPoint =
@@ -378,30 +402,23 @@ public class RobotContainer {
 
     /************
      * Drive Characterization ************
-     *
      * useful for characterizing the swerve modules for driving (i.e, determining kS
      * and kV)
-     *
      */
 
     /************
      * Distance Test ************
-     *
      * used for empirically determining the wheel diameter
-     *
      */
     Command distanceTestPathCommand = new PathPlannerAuto("DistanceTest");
     autoChooser.addOption("Distance Path", distanceTestPathCommand);
 
     /************
      * Auto Tuning ************
-     *
      * useful for tuning the autonomous PID controllers
-     *
      */
     Command tuningCommand = new PathPlannerAuto("Tuning");
     autoChooser.addOption("Auto Tuning", tuningCommand);
-
     Shuffleboard.getTab("MAIN").add(autoChooser.getSendableChooser());
   }
 

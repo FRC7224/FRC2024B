@@ -41,6 +41,19 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   /** Set the elevator speed */
+  public void SetElevIntakeOnAuto() {
+    if (!GetNoteLoadStatus()) {
+      elevatorleft.set(Constants.ELEVATOR_SPEED);
+      elevatorright.set(-Constants.ELEVATOR_SPEED);
+      intake.set(Constants.INTAKE_SPEED);
+    } else {
+      elevatorleft.set(0);
+      elevatorright.set(0);
+      intake.set(0);
+    }
+  }
+
+  /** Set the elevator speed */
   public void SetElevatorOnShoot() {
     elevatorleft.set(Constants.ELEVATOR_SPEED_SHOOT);
     elevatorright.set(-Constants.ELEVATOR_SPEED_SHOOT);
