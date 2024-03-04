@@ -30,9 +30,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "elon"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoothigh"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -54,15 +79,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intakeauto"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NE_R_M"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeauto"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NE_R_M"
+                }
+              }
+            ]
           }
         },
         {
@@ -92,13 +124,32 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "eloff"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoothigh"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elon"
+                }
+              }
+            ]
           }
         },
         {
@@ -110,38 +161,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shootstop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "eloff"
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "intakeauto"
+            "name": "shootstop"
           }
         }
       ]

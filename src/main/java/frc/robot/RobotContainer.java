@@ -51,12 +51,13 @@ public class RobotContainer {
       XStanceButton = new JoystickButton(drivejoystick, 2),
       ResetGyroButton = new JoystickButton(drivejoystick, 3),
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
-      IntakeoverrideButton = new JoystickButton(drivejoystick, 5),
+      ShootButtonLow = new JoystickButton(drivejoystick, 5),
       Autolevel = new JoystickButton(drivejoystick, 6),
-      ShootButtonLow = new JoystickButton(drivejoystick, 7),
-      ExtendOveride = new JoystickButton(drivejoystick, 8),
+      button7 = new JoystickButton(drivejoystick, 7),
+      button8 = new JoystickButton(drivejoystick, 8),
       IntakeButton = new JoystickButton(drivejoystick, 9),
-      ClimboverrideButton = new JoystickButton(drivejoystick, 10);
+      ClimboverrideButton = new JoystickButton(drivejoystick, 11),
+      IntakeoverrideButton = new JoystickButton(drivejoystick, 12);
   // button11 = new JoystickButton(drivejoystick, 11);
   // button12 = new JoystickButton(drivejoystick, 12);
 
@@ -156,15 +157,6 @@ public class RobotContainer {
             intakesubsystem = new IntakeSubsystem();
             climbcontrol = new ClimbSubsystem();
             shootsubsystem = new ShootSubsystem();
-
-            // try {
-            // layout = new AprilTagFieldLayout(VisionConstants.APRILTAG_FIELD_LAYOUT_PATH);
-            // } catch (IOException e) {
-            // layout = new AprilTagFieldLayout(new ArrayList<>(), 16.4592, 8.2296);
-            // }
-            // new Vision(
-            // new VisionIOSim(layout, drivetrain::getPose,
-            // VisionConstants.ROBOT_TO_CAMERA));
 
             break;
           }
@@ -310,35 +302,6 @@ public class RobotContainer {
 
   // ** Use this method to define your commands for autonomous mode.
 
-  //  Command BLeftRRight1 = new PathPlannerAuto("BLeftRRight1");
-  // Command BLeftRRight2 = new PathPlannerAuto("BLeftRRight2");
-  // Command BLeftRRight3 = new PathPlannerAuto("BLeftRRight3");
-
-  Command autoBLeftRRight =
-      Commands.sequence(
-          ///     new PathPlannerAuto("BLeftRRight1"),
-          //     Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
-          Commands.waitSeconds(0.5));
-  //     Commands.run(intakesubsystem::SetElevatorOnShoot, intakesubsystem));
-  /*       Commands.waitSeconds(0.5),
-          Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
-          Commands.runOnce(intakesubsystem::SetElevatorOn, intakesubsystem),
-          Commands.runOnce(intakesubsystem::SetIntakeOn, intakesubsystem))
-  //  new PathPlannerAuto("BLeftRRight1"),
-       Commands.waitSeconds(0.5),
-         Commands.runOnce(intakesubsystem::SetIntakeOff, intakesubsystem),
-         Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
-         //   new PathPlannerAuto("BLeftRRight1"),
-         Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
-         Commands.waitSeconds(0.5),
-         Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
-         Commands.waitSeconds(0.5),
-         Commands.runOnce(intakesubsystem::SetIntakeOff, intakesubsystem),
-         Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
-         Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem));
-
-  */
-
   private void configureAutoCommands() {
     AUTO_EVENT_MAP.put("event1", Commands.print("passed marker 1"));
     AUTO_EVENT_MAP.put("event2", Commands.print("passed marker 2"));
@@ -366,13 +329,30 @@ public class RobotContainer {
 
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
+
+    /*
+     *** Close to Amp
+     */
+    Command BLeftRRight1 = new PathPlannerAuto("BLeftRRight1");
+    autoChooser.addOption("Near AMP", BLeftRRight1);
+    /*
+     *** Close to Middle
+     */
+    Command BLeftRRight2 = new PathPlannerAuto("BLeftRRight1");
+    autoChooser.addOption("Middle", BLeftRRight2);
+    /*
+     *** Close to Source
+     */
+    Command BLeftRRight3 = new PathPlannerAuto("BLeftRRight1");
+    autoChooser.addOption("Near Source", BLeftRRight3);
+
     /************
      * Test Path ************
      * demonstration of PathPlanner auto with event markers
      */
     Command autoTest = new PathPlannerAuto("TestAuto");
     autoChooser.addOption("Test Auto", autoTest);
-
+    //
     /************
      * Choreo Test Path ************
      * demonstration of PathPlanner hosted Choreo path
@@ -380,18 +360,8 @@ public class RobotContainer {
     Command choreoAutoTest = new PathPlannerAuto("ChoreoTest");
     autoChooser.addOption("Choreo Auto", choreoAutoTest);
     /************
-     * Blue Right  ************
-     *
      * demonstration of PathPlanner auto with event markers
-     *
      */
-    Command BLeftRRight1 = new PathPlannerAuto("BLeftRRight1");
-    autoChooser.addOption("BLeft RRight", BLeftRRight1);
-    /************
-     * Start Point ************
-     * useful for initializing the pose of the robot to a known location
-     */
-
     Command startPoint =
         Commands.runOnce(
             () ->

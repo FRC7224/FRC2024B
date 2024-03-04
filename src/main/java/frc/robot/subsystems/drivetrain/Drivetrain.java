@@ -93,7 +93,7 @@ public class Drivetrain extends SubsystemBase {
 
   private static final String SUBSYSTEM_NAME = "Drivetrain";
   private static final boolean TESTING = false;
-  private static final boolean DEBUGGING = true;
+  private static final boolean DEBUGGING = false;
 
   private final SwerveDrivePoseEstimator poseEstimator;
   private boolean brakeMode;

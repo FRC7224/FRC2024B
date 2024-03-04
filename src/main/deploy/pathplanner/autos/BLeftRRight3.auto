@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.42,
+      "y": 4.1
+    },
+    "rotation": 180.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,13 +14,160 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NE_R_M"
+            "pathName": "S_R_A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoothigh"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoothigh"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootstop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eloff"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NE_R_M2"
+            "pathName": "S_R_AW"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeauto"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "S_R_M"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeoff"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_R_M2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoothigh"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoothigh"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eloff"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootstop"
           }
         }
       ]
