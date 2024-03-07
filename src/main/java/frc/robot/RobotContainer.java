@@ -338,13 +338,13 @@ public class RobotContainer {
     /*
      *** Close to Middle
      */
-    Command BLeftRRight2 = new PathPlannerAuto("BLeftRRight1");
-    autoChooser.addOption("Middle", BLeftRRight2);
+    Command Middle2 = new PathPlannerAuto("BLeftRRight2");
+    autoChooser.addOption("Middle", Middle2);
     /*
      *** Close to Source
      */
-    Command BLeftRRight3 = new PathPlannerAuto("BLeftRRight1");
-    autoChooser.addOption("Near Source", BLeftRRight3);
+    Command BRightRLeft3 = new PathPlannerAuto("BLeftRRight3");
+    autoChooser.addOption("Near Source", BRightRLeft3);
 
     /************
      * Test Path ************
