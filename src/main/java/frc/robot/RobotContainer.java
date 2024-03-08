@@ -346,6 +346,12 @@ public class RobotContainer {
     Command BRightRLeft3 = new PathPlannerAuto("BLeftRRight3");
     autoChooser.addOption("Near Source", BRightRLeft3);
 
+    /*
+     *** 4 note source
+     */
+    Command FNoteSource = new PathPlannerAuto("FNoteSource");
+    autoChooser.addOption("4 Note  Source", FNoteSource);
+
     /************
      * Test Path ************
      * demonstration of PathPlanner auto with event markers
