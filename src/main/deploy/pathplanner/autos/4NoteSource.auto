@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.55
+      "x": 1.43,
+      "y": 7.0
     },
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_A"
+            "pathName": "NE_R_A"
           }
         },
         {
@@ -75,7 +75,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_AW"
+            "pathName": "NE_R_AW"
           }
         },
         {
@@ -91,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "M_R_M"
+                  "pathName": "NE_R_M"
                 }
               }
             ]
@@ -112,7 +112,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_M2"
+            "pathName": "NE_R_M2"
           }
         },
         {
