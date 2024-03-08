@@ -347,6 +347,12 @@ public class RobotContainer {
     autoChooser.addOption("Near Source", BRightRLeft3);
 
     /*
+     *** 3 note source
+     */
+    Command TNoteSource = new PathPlannerAuto("TNoteSource");
+    autoChooser.addOption("3 Note  Source", TNoteSource);
+
+    /*
      *** 4 note source
      */
     Command FNoteSource = new PathPlannerAuto("FNoteSource");
