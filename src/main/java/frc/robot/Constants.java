@@ -75,9 +75,11 @@ public final class Constants {
   // Shooter
 
   public static int PN_SHELF = 0;
-  public static int ZONE_LOW = 250; // not used
+  public static int ZONE_LOW2 = 250; // not used
+  public static int ZONE_LOW = 400; // not used
   public static int ZONE_HIGH = 1500; // not used
-  public static double ZONE_LOW_VC = 0.4;
+  public static double ZONE_LOW_VC2 = 0.4; //  no shelf
+  public static double ZONE_LOW_VC = 0.5; // with shelf
   public static double ZONE_HIGH_VC = 1.0;
   public static double kR0 = 250;
   public static double kR1 = 1500;

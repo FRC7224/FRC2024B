@@ -120,6 +120,21 @@ public class ShootSubsystem extends SubsystemBase {
     // CANSparkMax.ControlType.kVelocity);
   }
 
+  /** sets the shooter speed */
+  public void setShootSpeedLow2() {
+    shootMotorRight.set(-Constants.ZONE_LOW_VC2);
+    shootMotorLeft.set(Constants.ZONE_LOW_VC2);
+    if (DEBUGGING) {
+      SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+      SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    }
+    // Closed loop control not used
+    // m_pidControllerRight.setReference(Constants.ZONE_LOW,
+    // CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerLeft.setReference(Constants.ZONE_LOW,
+    // CANSparkMax.ControlType.kVelocity);
+  }
+
   public void setShootSpeedHigh() {
     shootMotorRight.set(-Constants.ZONE_HIGH_VC);
     shootMotorLeft.set(Constants.ZONE_HIGH_VC);

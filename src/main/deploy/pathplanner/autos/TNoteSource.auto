@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NE_R_A"
+            "pathName": "NE_R_AT"
           }
         },
         {
@@ -26,7 +26,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -57,7 +57,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -75,7 +75,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NE_R_AW"
+            "pathName": "NE_R_AWT"
           }
         },
         {
@@ -91,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "NE_R_M"
+                  "pathName": "NE_R_MT"
                 }
               }
             ]
@@ -100,7 +100,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -112,7 +112,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NE_R_M2"
+            "pathName": "NE_R_M2T"
           }
         },
         {
@@ -155,7 +155,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -198,7 +198,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -222,7 +222,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -253,7 +253,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {

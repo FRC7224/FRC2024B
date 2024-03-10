@@ -52,8 +52,8 @@ public class RobotContainer {
       ResetGyroButton = new JoystickButton(drivejoystick, 3),
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
       ShootButtonLow = new JoystickButton(drivejoystick, 5),
-      Autolevel = new JoystickButton(drivejoystick, 6),
-      button7 = new JoystickButton(drivejoystick, 7),
+      ShootButtonLow2 = new JoystickButton(drivejoystick, 6),
+      Autolevel = new JoystickButton(drivejoystick, 7),
       button8 = new JoystickButton(drivejoystick, 8),
       IntakeButton = new JoystickButton(drivejoystick, 9),
       ClimboverrideButton = new JoystickButton(drivejoystick, 11),
@@ -228,7 +228,7 @@ public class RobotContainer {
             drivetrain,
             () -> drivejoystick.getRawAxis(1),
             () -> drivejoystick.getRawAxis(0),
-            () -> drivejoystick.getRawAxis(3))); // field vs robot drive
+            () -> -drivejoystick.getRawAxis(3))); // field vs robot drive
 
     // pneumaticsSubsystem.setDefaultCommand(new PneumaticsControl(pneumaticsSubsystem));
 
@@ -277,7 +277,7 @@ public class RobotContainer {
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
-    // Shoot High
+    // Shoot Low with shelf
     ShootButtonLow.onTrue(
         Commands.sequence(
             Commands.runOnce(() -> this.shelfextend.set(true)),
@@ -287,6 +287,15 @@ public class RobotContainer {
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
             Commands.runOnce(() -> this.shelfextend.set(false))));
+
+    // Shoot Low with shelf
+    ShootButtonLow2.onTrue(
+        Commands.sequence(
+            Commands.runOnce(shootsubsystem::setShootSpeedLow2, shootsubsystem),
+            Commands.waitSeconds(1.5), // wait for spin up
+            Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+            Commands.waitSeconds(1.0), // wait for shot
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
     // x-stance
     XStanceButton.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));
@@ -338,12 +347,12 @@ public class RobotContainer {
     /*
      *** Close to Middle
      */
-    Command Middle2 = new PathPlannerAuto("BLeftRRight2");
+    Command Middle2 = new PathPlannerAuto("Middle2");
     autoChooser.addOption("Middle", Middle2);
     /*
      *** Close to Source
      */
-    Command BRightRLeft3 = new PathPlannerAuto("BLeftRRight3");
+    Command BRightRLeft3 = new PathPlannerAuto("BRightRLeft3");
     autoChooser.addOption("Near Source", BRightRLeft3);
 
     /*
