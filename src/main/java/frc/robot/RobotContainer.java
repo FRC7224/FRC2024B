@@ -335,6 +335,9 @@ public class RobotContainer {
         "intakeauto", Commands.runOnce(intakesubsystem::SetElevIntakeOnAuto, intakesubsystem));
     NamedCommands.registerCommand(
         "intakeoff", Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem));
+    NamedCommands.registerCommand("rgyro", Commands.runOnce(drivetrain::autoGyroscope, drivetrain));
+    NamedCommands.registerCommand(
+        "fcent", Commands.runOnce(drivetrain::enableFieldRelative, drivetrain));
 
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
@@ -358,14 +361,14 @@ public class RobotContainer {
     /*
      *** 3 note source
      */
-    Command TNoteSource = new PathPlannerAuto("TNoteSource");
-    autoChooser.addOption("3 Note  Source", TNoteSource);
+    // Command TNoteSource = new PathPlannerAuto("TNoteSource");
+    //  autoChooser.addOption("3 Note  Source", TNoteSource);
 
     /*
      *** 4 note source
      */
-    Command FNoteSource = new PathPlannerAuto("FNoteSource");
-    autoChooser.addOption("4 Note  Source", FNoteSource);
+    //  Command FNoteSource = new PathPlannerAuto("FNoteSource");
+    //  autoChooser.addOption("4 Note  Source", FNoteSource);
 
     /************
      * Test Path ************
