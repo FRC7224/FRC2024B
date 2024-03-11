@@ -318,7 +318,7 @@ public class RobotContainer {
     // arm extend
     // Extendarm.onTrue(Commands.runOnce(drivetrain::enableXstance, drivetrain));
     // Extendarm.onTrue(Commands.runOnce(armcontrol::setExtendArm, armcontrol));
-    ResetGyroButton.onTrue(Commands.runOnce(drivetrain::autoGyroscope, drivetrain));
+    ResetGyroButton.onTrue(Commands.runOnce(drivetrain::zeroGyroscope, drivetrain));
   }
 
   // ** Use this method to define your commands for autonomous mode.
