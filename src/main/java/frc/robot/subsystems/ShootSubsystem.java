@@ -154,8 +154,8 @@ public class ShootSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
       SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
     }
-    m_pidControllerLeft.setReference(0, CANSparkMax.ControlType.kVelocity);
-    m_pidControllerRight.setReference(0, CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerLeft.setReference(0, CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerRight.setReference(0, CANSparkMax.ControlType.kVelocity);
     shootMotorRight.stopMotor();
     shootMotorLeft.stopMotor();
   }

@@ -270,11 +270,22 @@ public class RobotContainer {
 
     // Shoot High
     ShootButton.onTrue(
+        // Old
+        //  Commands.sequence(
+        //      Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+        //      Commands.waitSeconds(1.5), // wait for spin up
+        //      Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+        //      Commands.waitSeconds(1.0), // wait for shot
+        //      Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
+        // New
         Commands.sequence(
             Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
-            Commands.waitSeconds(1.5), // wait for spin up
-            Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
-            Commands.waitSeconds(1.0), // wait for shot
+            Commands.waitSeconds(1.0), // wait for spin up
+            Commands.parallel(
+                Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+                Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+                Commands.waitSeconds(1.5)), // wait for shot
+            Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
     // Shoot Low with shelf
