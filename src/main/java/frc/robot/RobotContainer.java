@@ -280,11 +280,11 @@ public class RobotContainer {
         // New
         Commands.sequence(
             Commands.parallel(
-                Commands.run(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+                Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
                 Commands.waitSeconds(1.0)), // wait for spin up
             Commands.parallel(
-                Commands.run(shootsubsystem::setShootSpeedHigh, shootsubsystem),
-                Commands.run(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+                Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+                Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
                 Commands.waitSeconds(1.5)), // wait for shot
             Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
