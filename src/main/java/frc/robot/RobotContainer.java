@@ -347,7 +347,7 @@ public class RobotContainer {
         "intakeauto", Commands.runOnce(intakesubsystem::SetElevIntakeOnAuto, intakesubsystem));
     NamedCommands.registerCommand(
         "intakeoff", Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem));
-    NamedCommands.registerCommand("rgyro", Commands.runOnce(drivetrain::autoGyroscope, drivetrain));
+    NamedCommands.registerCommand("rgyro", Commands.runOnce(drivetrain::zeroGyroscope, drivetrain));
     NamedCommands.registerCommand(
         "fcent", Commands.runOnce(drivetrain::enableFieldRelative, drivetrain));
 
