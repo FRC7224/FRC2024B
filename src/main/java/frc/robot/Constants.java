@@ -30,11 +30,11 @@ public final class Constants {
 
   ////// Intake Constants ///////////////////////////
   public static double INTAKE_TIMER = 3.0;
-  public static double INTAKE_SPEED = -0.6;
+  public static double INTAKE_SPEED = -0.7;
   public static int NOTE_SENSOR_CHANNEL = 4;
 
   ////// Elevator Constants ///////////////////////////
-  public static double ELEVATOR_SPEED = -0.15;
+  public static double ELEVATOR_SPEED = -0.18;
   public static double ELEVATOR_SPEED_SHOOT = -1.0;
 
   ////// Climb Constants ///////////////////////////
@@ -58,7 +58,7 @@ public final class Constants {
   public static boolean kclimb1SensorPhase = true;
   public static boolean kclimb1MotorInvert = false;
   // public static final Gains kGains = new Gains(0.5, 0.0, 0.1, 0.00, 0, 0.5);
-  public static final Gains kGainsR1 = new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0);
+  public static final Gains kGainsR1 = new Gains(0.5, 0.0, 0.5, 0.0, 0, 1.0);
 
   ////// Climb 2 Constants ///////////////////////////
   public static final int kclimb2SlotIdx = 0;
@@ -67,7 +67,7 @@ public final class Constants {
   public static boolean kclimb2SensorPhase = true;
   public static boolean kclimb2MotorInvert = false;
   public static final Gains kGainsR2 =
-      new Gains(0.01, 0.0, 0.5, 0.0, 0, 1.0); // Move Ball to shooter
+      new Gains(0.5, 0.0, 0.5, 0.0, 0, 1.0); // Move Ball to shooter
 
   // Shelf
   public static int PneumaticsShelf = 0;
@@ -75,12 +75,16 @@ public final class Constants {
   // Shooter
 
   public static int PN_SHELF = 0;
-  public static int ZONE_LOW2 = 250; // not used
-  public static int ZONE_LOW = 400; // not used
-  public static int ZONE_HIGH = 1500; // not used
-  public static double ZONE_LOW_VC2 = 0.4; //  no shelf
-  public static double ZONE_LOW_VC = 0.5; // with shelf
-  public static double ZONE_HIGH_VC = 1.0;
+  public static int ZONE_LOW2 = 250 * 42; // not used
+  public static int ZONE_LOW = 400 * 42; // not used
+  public static int ZONE_HIGH = 2500 * 42 * 100; // not used
+  // public static double ZONE_LOW_VC2 = 0.38; //  no shelf
+  // public static double ZONE_LOW_VC = 0.36; // with shelf
+  //  public static double ZONE_HIGH_VC = 1.0;
+  public static double ZONE_LOW_VC2 = 0.2; //  no shelf
+  public static double ZONE_LOW_VC = 0.2; // with shelf
+  public static double ZONE_HIGH_VC = .5;
+  public static double ZONE_HIGH_VC2 = 1.0;
   public static double kR0 = 250;
   public static double kR1 = 1500;
 

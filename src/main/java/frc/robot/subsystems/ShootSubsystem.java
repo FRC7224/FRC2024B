@@ -91,7 +91,7 @@ public class ShootSubsystem extends SubsystemBase {
     m_pidControllerLeft.setIZone(Constants.kshootLeftIz);
     m_pidControllerLeft.setFF(Constants.kshootLeftF);
     m_pidControllerLeft.setOutputRange(
-        Constants.kshootLeftkMinOutput, Constants.kshootLeftkMinOutput);
+        -Constants.kshootLeftkMinOutput, -Constants.kshootLeftkMinOutput);
 
     // display PID coefficients on SmartDashboard
     if (DEBUGGING) {
@@ -107,7 +107,7 @@ public class ShootSubsystem extends SubsystemBase {
 
   /** sets the shooter speed */
   public void setShootSpeedLow() {
-    shootMotorRight.set(-Constants.ZONE_LOW_VC);
+    shootMotorRight.set(Constants.ZONE_LOW_VC);
     shootMotorLeft.set(Constants.ZONE_LOW_VC);
     if (DEBUGGING) {
       SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
@@ -122,8 +122,8 @@ public class ShootSubsystem extends SubsystemBase {
 
   /** sets the shooter speed */
   public void setShootSpeedLow2() {
-    shootMotorRight.set(-Constants.ZONE_LOW_VC2);
-    shootMotorLeft.set(Constants.ZONE_LOW_VC2);
+    shootMotorRight.set(Constants.ZONE_LOW_VC2);
+    shootMotorLeft.set(-Constants.ZONE_LOW_VC2);
     if (DEBUGGING) {
       SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
       SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
@@ -143,10 +143,20 @@ public class ShootSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
     }
     // Closed loop control not used
-    // m_pidControllerRight.setReference(Constants.ZONE_HIGH,
-    // CANSparkMax.ControlType.kVelocity);
-    // m_pidControllerLeft.setReference(Constants.ZONE_HIGH,
-    // CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerRight.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerLeft.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
+  }
+
+  public void setShootSpeedHigh2() {
+    shootMotorRight.set(-Constants.ZONE_HIGH_VC2);
+    shootMotorLeft.set(Constants.ZONE_HIGH_VC2);
+    if (DEBUGGING) {
+      SmartDashboard.putNumber("Right SHoot Speed", m_encoderRight.getVelocity());
+      SmartDashboard.putNumber("Left SHoot Speed", m_encoderLeft.getVelocity());
+    }
+    // Closed loop control not used
+    // m_pidControllerRight.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerLeft.setReference(Constants.ZONE_HIGH, CANSparkMax.ControlType.kVelocity);
   }
 
   public void stopshooter() {

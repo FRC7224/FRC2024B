@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.42,
-      "y": 4.1
+      "x": 1.4,
+      "y": 5.55
     },
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_R_A"
+            "pathName": "M_R_A"
           }
         },
         {
@@ -42,7 +42,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 1.25
                 }
               },
               {
@@ -57,7 +57,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -75,7 +75,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_R_AW"
+            "pathName": "M_R_AW"
           }
         },
         {
@@ -91,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "S_R_M"
+                  "pathName": "M_R_M"
                 }
               },
               {
@@ -112,7 +112,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_R_M2"
+            "pathName": "M_R_M2"
           }
         },
         {
@@ -140,7 +140,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 1.25
                 }
               },
               {
@@ -173,13 +173,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_R_F2"
+            "pathName": "M_R_F"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -191,19 +191,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "fcent"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {

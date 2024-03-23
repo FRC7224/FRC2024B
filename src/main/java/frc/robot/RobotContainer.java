@@ -53,8 +53,8 @@ public class RobotContainer {
       FieldRelativeButton = new JoystickButton(drivejoystick, 4),
       ShootButtonLow = new JoystickButton(drivejoystick, 5),
       ShootButtonLow2 = new JoystickButton(drivejoystick, 6),
-      Autolevel = new JoystickButton(drivejoystick, 7),
-      button8 = new JoystickButton(drivejoystick, 8),
+      ShootButtonHigh3 = new JoystickButton(drivejoystick, 7),
+      Autolevel = new JoystickButton(drivejoystick, 8),
       IntakeButton = new JoystickButton(drivejoystick, 9),
       ClimboverrideButton = new JoystickButton(drivejoystick, 11),
       IntakeoverrideButton = new JoystickButton(drivejoystick, 12);
@@ -289,13 +289,35 @@ public class RobotContainer {
             Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
 
+    // Shoot High
+    ShootButtonHigh3.onTrue(
+        // Old
+        //  Commands.sequence(
+        //      Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+        //      Commands.waitSeconds(1.5), // wait for spin up
+        //      Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+        //      Commands.waitSeconds(1.0), // wait for shot
+        //      Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
+        // New
+        Commands.sequence(
+            Commands.parallel(
+                Commands.runOnce(shootsubsystem::setShootSpeedHigh, shootsubsystem),
+                Commands.waitSeconds(1.0)), // wait for spin up
+            Commands.parallel(
+                Commands.runOnce(shootsubsystem::setShootSpeedHigh2, shootsubsystem),
+                Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+                Commands.waitSeconds(1.5)), // wait for shot
+            Commands.runOnce(intakesubsystem::SetElevatorOff, intakesubsystem),
+            Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem)));
+
     // Shoot Low with shelf
     ShootButtonLow.onTrue(
         Commands.sequence(
-            Commands.runOnce(() -> this.shelfextend.set(true)),
             Commands.runOnce(shootsubsystem::setShootSpeedLow, shootsubsystem),
             Commands.waitSeconds(1.5), // wait for spin up
             Commands.runOnce(intakesubsystem::SetElevatorOnShoot, intakesubsystem),
+            Commands.waitSeconds(0.2), // wait for shot
+            Commands.runOnce(() -> this.shelfextend.set(true)),
             Commands.waitSeconds(1.0), // wait for shot
             Commands.runOnce(shootsubsystem::stopshooter, shootsubsystem),
             Commands.runOnce(() -> this.shelfextend.set(false))));
@@ -354,21 +376,37 @@ public class RobotContainer {
     // add commands to the auto chooser
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
 
+    // Blue //////
     /*
      *** Close to Amp
      */
     Command BLeftRRight1 = new PathPlannerAuto("BLeftRRight1");
-    autoChooser.addOption("Near AMP", BLeftRRight1);
+    autoChooser.addOption("Blue Near AMP", BLeftRRight1);
     /*
      *** Close to Middle
      */
-    Command Middle2 = new PathPlannerAuto("Middle2");
-    autoChooser.addOption("Middle", Middle2);
+    Command BMiddle2 = new PathPlannerAuto("BMiddle2");
+    autoChooser.addOption("Blue Middle Shoot 2 Source", BMiddle2);
     /*
      *** Close to Source
      */
     Command BRightRLeft3 = new PathPlannerAuto("BRightRLeft3");
-    autoChooser.addOption("Near Source", BRightRLeft3);
+    autoChooser.addOption("BLue Near Source", BRightRLeft3);
+
+    //// RED ////
+
+    Command RLeftRRight1 = new PathPlannerAuto("RLeftRRight1");
+    autoChooser.addOption("Red Near Source", RLeftRRight1);
+    /*
+     *** Close to Middle
+     */
+    Command RMiddle2 = new PathPlannerAuto("RMiddle2");
+    autoChooser.addOption("Red Middle Shoot 2 AMP", RMiddle2);
+    /*
+     *** Close to Amp
+     */
+    Command RRightRLeft3 = new PathPlannerAuto("RRightRLeft3");
+    autoChooser.addOption("Red Near Amp", RRightRLeft3);
 
     /*
      *** 3 note source
@@ -386,8 +424,8 @@ public class RobotContainer {
      * Test Path ************
      * demonstration of PathPlanner auto with event markers
      */
-    Command autoTest = new PathPlannerAuto("TestAuto");
-    autoChooser.addOption("Test Auto", autoTest);
+    // Command autoTest = new PathPlannerAuto("TestAuto");
+    // autoChooser.addOption("Test Auto", autoTest);
     //
     /************
      * Choreo Test Path ************
