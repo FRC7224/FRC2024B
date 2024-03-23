@@ -26,7 +26,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -124,7 +124,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -179,7 +179,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -191,19 +191,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "fcent"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
