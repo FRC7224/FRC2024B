@@ -409,6 +409,15 @@ public class RobotContainer {
     Command RRightRLeft3 = new PathPlannerAuto("RRightRLeft3");
     autoChooser.addOption("Red Near Amp", RRightRLeft3);
 
+    //   Go Straight
+    Command BRight = new PathPlannerAuto("BRight");
+    autoChooser.addOption("Blue move to Right", BRight);
+    /*
+    //   Go Straight
+    */
+    Command BLeft = new PathPlannerAuto("BLeft");
+    autoChooser.addOption("Blue move to Left", BLeft);
+
     /*
      *** 3 note source
      */

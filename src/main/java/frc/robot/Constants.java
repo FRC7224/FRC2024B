@@ -34,7 +34,7 @@ public final class Constants {
   public static int NOTE_SENSOR_CHANNEL = 4;
 
   ////// Elevator Constants ///////////////////////////
-  public static double ELEVATOR_SPEED = -0.18;
+  public static double ELEVATOR_SPEED = -0.14;
   public static double ELEVATOR_SPEED_SHOOT = -1.0;
 
   ////// Climb Constants ///////////////////////////
@@ -83,7 +83,7 @@ public final class Constants {
   //  public static double ZONE_HIGH_VC = 1.0;
   public static double ZONE_LOW_VC2 = 0.2; //  no shelf
   public static double ZONE_LOW_VC = 0.2; // with shelf
-  public static double ZONE_HIGH_VC = .5;
+  public static double ZONE_HIGH_VC = 0.5;
   public static double ZONE_HIGH_VC2 = 1.0;
   public static double kR0 = 250;
   public static double kR1 = 1500;

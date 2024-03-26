@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.55
+      "x": 1.43,
+      "y": 7.0
     },
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_A"
+            "pathName": "NE_R_AT"
           }
         },
         {
@@ -26,7 +26,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -42,7 +42,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.25
+                  "waitTime": 0.5
                 }
               },
               {
@@ -75,7 +75,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_AW"
+            "pathName": "NE_R_AWT"
           }
         },
         {
@@ -91,16 +91,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "M_R_M"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
+                  "pathName": "NE_R_MT"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
           }
         },
         {
@@ -112,7 +112,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_M2"
+            "pathName": "NE_R_M2T"
           }
         },
         {
@@ -140,7 +140,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.25
+                  "waitTime": 0.5
                 }
               },
               {
@@ -155,7 +155,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -173,7 +173,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_R_F"
+            "pathName": "NE_R_M3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeauto"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NE_R_M4"
+                }
+              }
+            ]
           }
         },
         {
@@ -185,7 +204,50 @@
         {
           "type": "named",
           "data": {
-            "name": "rgyro"
+            "name": "intakeoff"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NE_R_M5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoothigh"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoothigh"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elon"
+                }
+              }
+            ]
           }
         },
         {
@@ -197,7 +259,13 @@
         {
           "type": "named",
           "data": {
-            "name": "fcent"
+            "name": "eloff"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootstop"
           }
         }
       ]
